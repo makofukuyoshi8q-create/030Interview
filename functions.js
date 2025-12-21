@@ -23,7 +23,7 @@ window.addEventListener('scroll', () => {
         Math.floor(progress * totalFrames) + 1,
         totalFrames
     );
-    topImage.src = `images/top-${frameIndex}.png`;
+    topImage.src = `/images/top-${frameIndex}.png`;
 
     // --- 文字のじわじわ浮き出し ---
     // progressが 0.5 (半分) くらいで完全に表示されるように「progress * 2」に設定
