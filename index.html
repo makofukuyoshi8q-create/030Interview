@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=BIZ+UDPGothic:wght@400;700&family=Kaisei+Opti:wght@700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <section class="top-page-section">
+        <div class="sticky-wrapper">
+            <img src="images/top-1.png" id="top-image" alt="Animation">
+
+            <h1 class="top-title">
+                <span class="top-text">「好き」を</span>
+                <span class="top-text right-text">追い求めて</span>
+            </h1>
+        </div>
+    </section>
+
+    <main class="content-area">
+        <svg style="display:none;">
+            <filter id="noiseFilter">
+                <feTurbulence type="fractalNoise" baseFrequency="5.0" numOctaves="3" stitchTiles="stitch" />
+            </filter>
+        </svg>
+
+        <section class="clipboard-container">
+            <div class="clipboard-sticky-wrapper">
+                <img src="images/board.png" class="board-base">
+                <div class="paper-stack">
+                    <div class="paper next-sheet">
+                        <div class="noise-overlay"></div>
+                        <div class="paper-content prologue-page">
+                            <h2 class="main-title">[Prolougue]</h2>
+                            <div class="prologue-text">
+                                <p>私がレイナさんに初めて会ったのは、大学1年生の秋だった。</p>
+                                <p>渋谷と原宿の間の通り沿いに佇む(03)0のお店は<br>
+                                    ガラス張りで外からでも洗練された空気が伝わってくる。</p>
+
+                                <p>大学生になって半年が経った頃で、将来やりたいことが<br>
+                                    はっきり決まっているわけではなかったけれど、<br>
+                                    <span class="highlight-text">「自由に、楽しく、自分の好きなことをしながら<br>
+                                        生きていけたらいいな」</span><br>
+                                    そんな漠然とした思いを抱えていた当時の私にとって、<br>
+                                    そこで働くレイナさんの姿はとても輝いて見えた。
+                                </p>
+
+                                <p>楽しそうに働きながら、自分のやりたいことを形に<br>
+                                    しているように見えて、それはまさに私が思い描いていた<br>
+                                    “将来なりたい大人像”そのものだった。</p>
+
+                                <p>(03)0の店長としてお店に立つレイナさん。<br>
+                                    何を経験し、どんな選択を重ね、どんな生き方をして<br>
+                                    ここにたどり着いたのだろう。<br>
+                                    そう思い、話を聞いてみることにした。</p>
+                            </div>
+                            <h3 class="question-text">Q.人生の中での転機はありますか？</h3>
+                        </div>
+                    </div>
+
+                    <div class="paper current-sheet">
+                        <div class="noise-overlay"></div>
+                        <div class="paper-content profile-page">
+                            <section class="profile-section">
+                                <h2 class="main-title">[Profile]</h2>
+                                <div class="profile-grid">
+                                    <div class="profile-image">
+                                        <img src="images/reina.png" alt="レイナさん">
+                                    </div>
+                                    <div class="profile-info">
+                                        <p>Name : レイナさん</p>
+                                        <p>Age : 38歳</p>
+                                        <p>From : 東京</p>
+                                        <p>Occupation : カフェ“(03)0”の店長</p>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section class="about-section">
+                                <h2 class="main-title">[About “(03)0”]</h2>
+                                <div class="about-grid">
+                                    <div class="about-info">
+                                        <dl>
+                                            <dt>Category :</dt>
+                                            <dd>カフェ / バー / <br>セレクトショップ</dd>
+                                            <dt>Concept :</dt>
+                                            <dd>ベルリン ・ 東京</dd>
+                                            <dt>Detail :</dt>
+                                            <dd>SNSで“水色ラテ”が話題ベルリン出身のオーナーさんが一点物をセレクトしている</dd>
+                                        </dl>
+                                    </div>
+                                    <div class="item-image">
+                                        <img src="images/latte.png" alt="Blue latte">
+                                        <p class="caption">ラベンダー × ミルク<br><span>Blue latte</span></p>
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+                <img src="images/clip.png" class="clip-hardware">
+            </div>
+        </section>
+
+        <section class="tenki-section">
+            <div class="sticky-container">
+                <div class="tree-sequence">
+                    <img src="images/tree-1.png" class="tree-frame active">
+                    <img src="images/tree-2.png" class="tree-frame">
+                    <img src="images/tree-3.png" class="tree-frame">
+                    <img src="images/tree-4.png" class="tree-frame">
+                    <img src="images/tree-5.png" class="tree-frame">
+                    <img src="images/tree-6.png" class="tree-frame">
+                    <img src="images/tree-7.png" class="tree-frame">
+                    <img src="images/tree-8.png" class="tree-frame">
+                    <img src="images/tree-9.png" class="tree-frame">
+                    <img src="images/tree-10.png" class="tree-frame">
+                </div>
+
+                <div class="tenki">
+                    <div class="tenki-text">
+                        <p>私実は2.3年前に婚約していたんですけど<br>
+                            うまくいかなくなって。<br>
+                            誰かに希望を期待して生きるのは難しいなと。</p>
+                        <p>誰かに依存しちゃうと自分の好きなこと<br>
+                            っていうのは見えないと思ったの。</p>
+                        <p>そんな時に偶然この仕事に縁があってね。<br>
+                            これからは本当に自分の好きなことやろうって。</p>
+                        <p><span class="tenki-highlight">これが私の中の「人生の転機」かな。</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="menu-clipboard-section">
+            <div class="clipboard-sticky-wrapper">
+                <img src="images/board_2.png" class="board-base landscape">
+
+                <div class="paper-stack landscape">
+                    <div class="paper menu-sheet landscape">
+                        <div class="noise-overlay"></div>
+                        <div class="paper-content">
+                            <h2 class="menu-title">[Menu]</h2>
+                            <div class="menu-grid">
+                                <a href="chapter1.html" class="menu-item">
+                                    <p class="chapter-num">第1章</p>
+                                    <p class="chapter-title">030に出会うまで</p>
+                                    <img src="images/menu-1.PNG" alt="第1章" class="menu-icon">
+                                    <p class="chapter-quote">「え？俺結婚する<br>つもりないよ」</p>
+                                </a>
+
+                                <a href="chapter2.html" class="menu-item">
+                                    <p class="chapter-num">第2章</p>
+                                    <p class="chapter-title">030との出会い</p>
+                                    <img src="images/menu-2.PNG" alt="第2章" class="menu-icon">
+                                    <p class="chapter-quote">「センスは努力で良くなれる<br>ものじゃないと思う」</p>
+                                </a>
+
+                                <a href="chapter3.html" class="menu-item">
+                                    <p class="chapter-num">第3章</p>
+                                    <p class="chapter-title">過去とこれから</p>
+                                    <img src="images/menu-3.PNG" alt="第3章" class="menu-icon">
+                                    <p class="chapter-quote">「結局ね、<br>自分で選んでるの」</p>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <img src="images/clip_2.png" class="clip-hardware landscape">
+            </div>
+        </section>
+
+        <script src="functions.js"></script>
+</body>
+
+</html>

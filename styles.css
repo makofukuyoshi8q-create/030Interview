@@ -1,0 +1,509 @@
+/* 全体の基本設定 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'BIZ UDPGothic', sans-serif;
+    background-image: url('images/background.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow-x: hidden;
+}
+
+.top-page-section {
+    height: 400vh;
+    position: relative;
+}
+
+/* 画面に固定する部分 */
+.sticky-wrapper {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+#top-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.top-title {
+    font-family: 'Kaisei Opti', serif;
+    font-size: 5vw;
+    position: absolute;
+    margin-top: 250px;
+    z-index: 10;
+    width: 85%;
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+.top-text {
+    color: #596f87;
+}
+
+
+
+
+/* クリップボード全体のコンテナ */
+/* 外枠：スクロールできる全長 */
+.clipboard-container {
+    position: relative;
+    width: 100vw;
+    height: 450vh;
+    /* スクロール遊び分 */
+    margin-top: 300vh;
+    margin-bottom: 50vh;
+}
+
+/* 画面に張り付くエリア */
+.clipboard-sticky-wrapper {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    /* 紙がめくれた時のはみ出し防止 */
+}
+
+/* 全てのパーツを中央に整列させるための共通設定 */
+.board-base,
+.clip-hardware,
+.paper-stack {
+    position: absolute;
+    /* fixedからabsoluteに変更 */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.board-base {
+    z-index: 1;
+    width: 80vw;
+    height: auto;
+    object-fit: contain;
+}
+
+.clip-hardware {
+    z-index: 10;
+    width: 80vw;
+    height: auto;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+/* 紙のサイズと位置（現状の数値を維持） */
+.paper-stack {
+    z-index: 5;
+    width: 33vw;
+    height: 80vh;
+    top: 51%;
+    /* 板に合わせた微調整 */
+}
+
+/* 紙自体の設定は変更なしでOK */
+.paper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fefdf7;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transform-origin: top;
+    transition: transform 3.0s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    backface-visibility: hidden;
+    /* 裏側を見せない */
+}
+
+.noise-overlay {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    filter: url(#noiseFilter);
+    opacity: 0.4;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.paper-content {
+    position: relative;
+    padding: 60px 10px 100px 10px;
+}
+
+/* 下の紙（2枚目） */
+.next-sheet {
+    z-index: 1;
+}
+
+/* 上の紙（1枚目） */
+.current-sheet {
+    z-index: 2;
+}
+
+/* めくりアニメーション */
+.current-sheet.is-flipped {
+    transform: rotateX(-120deg);
+}
+
+
+
+
+
+/* プロフィールページ全体の基本色とフォント設定 */
+.profile-page {
+    color: #2c4463;
+    /* 少し青みがかった濃いグレー */
+    line-height: 1.6;
+    font-family: 'Kaisei Opti', serif;
+}
+
+/* タイトル設定 */
+.main-title {
+    text-align: center;
+    font-size: 33px;
+    letter-spacing: 0.05em;
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+
+.profile-section {
+    position: relative;
+    /* イラストを自由に配置するための基準 */
+    width: 100%;
+    margin-bottom: 5vh;
+}
+
+.profile-grid {
+    display: grid;
+    grid-template-columns: 100% 1fr;
+    column-gap: 30px;
+    align-items: start;
+}
+
+.profile-image {
+    position: absolute;
+    left: -45px;
+    /* ここで左端からの距離を指定 */
+    top: 30px;
+}
+
+.profile-image img {
+    width: 19vw;
+    /* イラストのサイズ */
+    height: auto;
+}
+
+.profile-info p {
+    font-size: 1.1vw;
+    line-height: 1.1;
+    margin: 0 0 6px;
+    font-weight: bold;
+}
+
+/* 紹介文：イラストと重ならないように左側に余白を作る */
+.profile-info {
+    margin-left: 11.5vw;
+    margin-bottom: 5vh;
+    margin-top: 1vh;
+    line-height: 1.2;
+}
+
+/* --- 下段：About部分のレイアウト --- */
+
+.about-section {
+    position: relative;
+    width: 100%;
+    margin-top: 3vh;
+    /* プロフィールとの間隔 */
+}
+
+.about-grid {
+    display: flex;
+    justify-content: space-between;
+    /* 左右の両端に振り分ける */
+    align-items: flex-start;
+    padding-left: 5%;
+    margin-top: 30px;
+}
+
+/* 左側：説明文（Category, Concept, Detail） */
+.about-info dl {
+    display: grid;
+    /* 項目名(Category:)と中身を 2列に並べる */
+    grid-template-columns: auto 1fr;
+    gap: 8px 10px;
+    /* 縦と横の隙間 */
+    margin-top: 20px;
+}
+
+.about-info dt {
+    font-size: 1.0vw;
+    font-weight: bold;
+    color: #2c4463;
+    white-space: nowrap;
+    /* 改行させない */
+}
+
+.about-info dd {
+    font-size: 1.0vw;
+    font-weight: bold;
+    margin-right: -20px;
+    margin-left: 0%;
+    line-height: 1.2;
+}
+
+/* 右側：ラテ画像とキャプション */
+.item-image {
+    text-align: center;
+    margin-top: -30px;
+    /* 画像を少し上に微調整 */
+
+}
+
+.item-image img {
+    width: 13vw;
+    /* グラスのサイズ */
+    height: auto;
+    display: block;
+    margin-top: 10px;
+}
+
+.item-image .caption {
+    font-size: 0.7vw;
+    margin-top: 0px;
+    line-height: 1.2;
+    color: #2c4463;
+}
+
+.item-image .caption span {
+    font-size: 1.1vw;
+    display: block;
+    font-family: 'Kaisei Opti', serif;
+    margin-top: 1px;
+}
+
+
+
+/* --- プロローグページ（2枚目）のスタイル --- */
+
+.prologue-page {
+    text-align: center;
+    /* 文章を中央揃えに */
+    color: #2c4463;
+    font-family: 'Kaisei Opti', serif;
+    margin-top: -2vh;
+}
+
+.prologue-text {
+    font-size: 0.9vw;
+    /* 少し小さめで繊細な印象に */
+    line-height: 1.8;
+    /* 行間を広く取って読みやすく */
+    margin-bottom: 1vh;
+    margin-top: 2vh;
+}
+
+.prologue-text p {
+    margin-bottom: 1.3em;
+    /* 段落ごとの隙間 */
+}
+
+.highlight-text {
+    font-weight: bold;
+    font-weight: 900;
+    font-size: 1.1vw;
+    display: inline-block;
+    line-height: 1.2;
+    margin: 15px 0;
+}
+
+.question-text {
+    font-size: 1.6vw;
+    margin-top: 0;
+    letter-spacing: 0.05em;
+    font-weight: bold;
+}
+
+
+
+
+
+
+.tenki-section {
+    position: relative;
+    width: 100vw;
+    height: 400vh;
+    /* 4枚分くらいの長さ。ここがスクロールの遊びになります */
+}
+
+/* 画面に張り付く共通の土台 */
+.sticky-container {
+    position: sticky;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.tree-sequence {
+    position: absolute;
+    /* 親(sticky-container)全体に広げる */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.tree-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain; 
+    object-position: bottom;
+    opacity: 0;
+    transition: opacity 0.05s linear;
+}
+
+.tree-frame.active {
+    opacity: 1;
+}
+
+/* 文字の設定：画像より上のレイヤーで中央に配置 */
+.tenki {
+    position: relative;
+    z-index: 10;
+    /* 木(z-index: 1)より手前 */
+    text-align: center;
+    color: #2c4463;
+    max-width: 800px;
+    padding: 0 20px;
+    font-family: 'Kaisei Opti', serif;
+    margin-top: -5vh;
+}
+
+.tenki-text {
+    font-size: 1.2vw;
+    line-height: 2.5;
+    font-weight: bold;
+    letter-spacing: 0.02em;
+}
+
+.tenki-highlight {
+    display: inline-block; /* 余白や行間を制御しやすくするため */
+    font-size: 1.6vw;      /* 周りの 1.2vw より一回り大きく */
+    font-weight: 900;      /* 一番太く */
+    margin-top: 20px;      /* 前の行と少し距離を置く */
+}
+
+
+
+
+
+
+/* 横型クリップボード専用セクション */
+.menu-clipboard-section {
+    position: relative;
+    width: 100vw;
+    height: 200vh; /* スクロール留まり分 */
+    font-family: 'Kaisei Opti', serif;
+    text-align: center;
+    color: #2c4463;
+    margin-top: 100vh;
+}
+
+/* 横長用のボード調整 */
+.board-base.landscape,
+.clip-hardware.landscape {
+    width: 90vw; /* 縦型より横に広く */
+    height: auto;
+}
+
+/* 横長用の紙の束 */
+.paper-stack.landscape {
+    width: 66vw;  /* 横幅を広く */
+    height: 77vh; /* 高さを抑える */
+    top: 52%;     /* ボードの位置に合わせる */
+}
+
+.paper.landscape {
+    width: 100%;
+    height: 100%;
+}
+
+/* Menuの中身のレイアウト（横並びを強調） */
+.menu-grid {
+    display: flex;
+    justify-content: center; /* 全体を中央寄せ */
+    align-items: center;     /* 垂直方向の中央寄せ */
+    height: 100%;            /* 親要素（paper-content）の高さに合わせる */
+    gap: 2vw;                /* アイテム同士の間隔を均等に */
+    padding: 0;
+    margin: 0;
+}
+
+/* イラスト（アイコン）の基本設定 */
+.menu-icon {
+    width: 130%;             /* 親要素（menu-item）の幅に合わせる */
+    height: auto;
+    margin-top: 0vh;
+    margin-bottom: -5vh;        /* 上下の余白のみ設定（左右はauto） */
+    display: block;          /* 余計な隙間を消す */
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+/* カーソルを当てた（ホバー）時の動き */
+.menu-item:hover .menu-icon {
+    transform: scale(1.15); /* 1.15倍にズーム */
+    filter: brightness(1.1); /* 少し明るくして「反応してる感」を出す */
+}
+
+.menu-item {
+    flex: 1;                 /* 3等分にする */
+    max-width: 30%;          /* 広がりすぎ防止 */
+    display: flex;
+    flex-direction: column;
+    align-items: center;     /* 水平方向の中央 */
+    text-align: center;
+    cursor: pointer;
+    font-family: 'Kaisei Opti', serif;
+}
+
+/* リンクテキスト（章タイトルなど）にもホバー効果 */
+.menu-item:hover .chapter-title {
+    color: #4a6fa5; /* ホバー時に少し色を変える（任意） */
+    text-decoration: underline; /* 下線を表示 */
+}
+
+.menu-title {
+    font-size: 3.5vw;
+    margin-bottom: 2vh;
+}
+
+.chapter-quote {
+    font-size: 1.2vw;
+    margin-top: -1vh;
+    margin-bottom: 0;
+}
