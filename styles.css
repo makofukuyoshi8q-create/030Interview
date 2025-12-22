@@ -136,7 +136,7 @@ body {
     width: 200%;
     height: 200%;
     filter: url(#noiseFilter);
-    opacity: 0.4;
+    opacity: 0.3;
     pointer-events: none;
     z-index: 1;
 }
@@ -506,4 +506,102 @@ body {
     font-size: 1.2vw;
     margin-top: -1vh;
     margin-bottom: 0;
+}
+
+
+
+
+/* ============================================================
+   CHAPTERページ専用：紙の固定 ＆ 中身スクロール完全版
+   ============================================================ */
+
+/* 1. クリップボード全体を画面中央に固定 */
+.chapter-container .clipboard-fixed-wrapper {
+    position: sticky;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+}
+
+/* 2. ボード(板)と金具のサイズと位置を index と統一 */
+.chapter-container .board-base,
+.chapter-container .clip-hardware {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 80vw !important; /* index.htmlの縦型と同じ */
+    height: auto !important;
+}
+
+.chapter-container .board-base { z-index: 1; }
+.chapter-container .clip-hardware { z-index: 10; pointer-events: none; }
+
+/* 3. 紙の「外枠」：ボードの中にピタッと固定（動かさない） */
+.chapter-container .paper.ch1-paper {
+    position: absolute !important;
+    top: 51% !important; /* 金具の位置に合わせた微調整 */
+    left: 50% !important;
+    transform: translate(-50%, -50%) rotateX(0deg) !important; /* めくれを0に強制 */
+    
+    /* ボードの内側に収まるサイズ */
+    width: 32.5vw !important;
+    height: 77vh !important;
+    
+    background-color: #fefdf7 !important;
+    overflow: hidden !important; /* 紙自体はスクロールさせない */
+    z-index: 5 !important;
+    transition: none !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 4. ノイズレイヤー：紙の枠内に固定して質感を出す */
+.chapter-container .ch1-paper .noise-overlay {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2; /* 文字の下 */
+    opacity: 0.4;
+    pointer-events: none;
+}
+
+/* 5. 【重要】文字だけが動くスクロールエリア */
+.scrollable-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto; /* ここでスクロールを発生 */
+    z-index: 3; /* ノイズの上 */
+    scrollbar-width: none; /* Firefox */
+}
+
+
+/* 6. インタビュー文章のレイアウト */
+.scrollable-area .paper-content {
+    padding: 110px 40px 120px 40px !important; /* クリップに被らないよう上部を広く */
+}
+
+.interview-block {
+    font-family: 'Kaisei Opti', serif;
+    color: #2c4463;
+}
+
+.question {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 2.0em;
+}
+
+.answer {
+    font-size: 18px;
+    line-height: 1.8em;
+    margin-bottom: 5.0em;
 }
