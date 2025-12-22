@@ -23,11 +23,8 @@ window.addEventListener('scroll', () => {
         Math.floor(progress * totalFrames) + 1,
         totalFrames
     );
-    topImage.src = `/images/top-${frameIndex}.png`;
+    topImage.src = `images/top-${frameIndex}.png`;
 
-    // --- 文字のじわじわ浮き出し ---
-    // progressが 0.5 (半分) くらいで完全に表示されるように「progress * 2」に設定
-    // ※もっとゆっくり表示させたい場合は「progress * 1」など調整してください
     const textOpacity = Math.min(1, progress * 2); 
     topTitle.style.opacity = textOpacity;
 
@@ -35,6 +32,8 @@ window.addEventListener('scroll', () => {
     const translateY = 10 - (textOpacity * 10);
     topTitle.style.transform = `translateY(${translateY}px)`;
 });
+
+
 
 window.addEventListener('scroll', () => {
     const paper = document.querySelector('.current-sheet');
