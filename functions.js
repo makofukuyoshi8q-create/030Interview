@@ -1,5 +1,7 @@
+// ...existing code...
+
 // 画像のプリロード（読み込み待ちによるチカチカを防止）
-const totalFrames = 8;
+const totalFrames = 10;
 for (let i = 1; i <= totalFrames; i++) {
     const img = new Image();
     img.src = `images/top-${i}.png`;
@@ -9,23 +11,23 @@ window.addEventListener('scroll', () => {
     const topSection = document.querySelector('.top-page-section');
     const topImage = document.getElementById('top-image');
     const topTitle = document.querySelector('.top-title');
-    
+
     const scrollY = window.scrollY;
     const sectionTop = topSection.offsetTop;
     const sectionHeight = topSection.offsetHeight - window.innerHeight;
-    
+
     let progress = (scrollY - sectionTop) / sectionHeight;
     progress = Math.max(0, Math.min(1, progress * 2));
 
     // --- 画像の切り替え ---
-    const totalFrames = 8;
+    const totalFrames = 10;
     const frameIndex = Math.min(
         Math.floor(progress * totalFrames) + 1,
         totalFrames
     );
     topImage.src = `images/top-${frameIndex}.png`;
 
-    const textOpacity = Math.min(1, progress * 2); 
+    const textOpacity = Math.min(1, progress * 2);
     topTitle.style.opacity = textOpacity;
 
     // 位置もじわじわ上に上げる（10pxから0pxへ）
@@ -33,28 +35,78 @@ window.addEventListener('scroll', () => {
     topTitle.style.transform = `translateY(${translateY}px)`;
 });
 
+// ...existing code...
 
-
-window.addEventListener('scroll', () => {
-    const paper = document.querySelector('.current-sheet');
+// --- clipboard セクション用のスクロール処理（オーバーレイ→フレーム→めくり→Prologue 表示） ---
+(function () {
     const container = document.querySelector('.clipboard-container');
-    
-    const rect = container.getBoundingClientRect();
+    const paperImg = document.getElementById('paper-image');
+    const currentSheet = document.querySelector('.current-sheet');
+    const topTitle = document.querySelector('.top-title');
+    const overlay = document.getElementById('paper-overlay');
 
-    // 画面の一枚分（window.innerHeight）くらいスクロールしてからめくりたい場合
-    // 「要素の上端が、画面の上からマイナス（画面外に少し出た状態）」を条件にします
-    if (rect.top < -window.innerHeight * 0.5) { 
-        paper.classList.add('is-flipped');
-    } else {
-        paper.classList.remove('is-flipped');
+    if (!container || !paperImg || !currentSheet || !overlay) return;
+
+    const frameCount = 13; // images/paper-1.png ... paper-13.png
+    for (let i = 1; i <= frameCount; i++) {
+        const img = new Image();
+        img.src = `images/paper-${i}.png`;
     }
-});
+
+    const fadeStart = 0.4;
+    const fadeEnd = 0.3;   // 0..fadeEnd: overlay フェードアウト領域（短めにして素早く消す）
+    const animStart = fadeEnd;
+    const animEnd = 0.5;    // animStart..animEnd: フレーム切替領域（やや圧縮）
+
+    let flipped = false;
+
+    // functions.js の onScroll 関数内を差し替え
+    function onScroll() {
+        const rect = container.getBoundingClientRect();
+        const scrolled = Math.max(0, -rect.top);
+        const maxScroll = Math.max(1, rect.height - window.innerHeight);
+        let progress = Math.min(1, scrolled / maxScroll);
+
+        // 1. overlay (プロフィール) のフェード処理
+        if (progress <= fadeEnd) {
+            const t = progress / fadeEnd;
+            overlay.style.opacity = String(1 - t);
+            overlay.style.visibility = 'visible';
+            overlay.style.pointerEvents = 'auto';
+        } else {
+            overlay.style.opacity = '0';
+            overlay.style.visibility = 'hidden'; // display: none は使わず visibility で制御
+            overlay.style.pointerEvents = 'none';
+        }
+
+        // 2. フレームアニメーション (paper-1 〜 paper-13)
+        const norm = Math.max(0, Math.min(1, (progress - animStart) / (animEnd - animStart)));
+        const frameIndex = Math.min(frameCount, Math.max(1, Math.floor(norm * (frameCount - 1)) + 1));
+        paperImg.src = `images/paper-${frameIndex}.png`;
+
+        // 3. プロローグ表示の判定
+        // paper-13 に到達したかどうかを重視する
+        if (frameIndex === frameCount && progress > 0.7) {
+            if (!flipped) {
+                currentSheet.classList.add('revealed');
+                flipped = true;
+            }
+        } else {
+            if (flipped) {
+                currentSheet.classList.remove('revealed');
+                flipped = false;
+            }
+        }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+})();
 
 window.addEventListener('scroll', () => {
     // クラス名を実際のHTMLに合わせて指定
     const section = document.querySelector('.tenki-section');
     const frames = document.querySelectorAll('.tree-frame');
-    
+
     if (!section || frames.length === 0) return;
 
     const sectionTop = section.offsetTop;
@@ -64,7 +116,7 @@ window.addEventListener('scroll', () => {
     // セクション内にいるときだけ実行
     if (scrollY >= 0 && scrollY <= sectionHeight) {
         const progress = scrollY / sectionHeight;
-        
+
         // 10枚の画像から、現在の進捗に合うインデックスを計算
         const frameIndex = Math.min(
             frames.length - 1,
@@ -86,7 +138,7 @@ function scrollToSection(selector) {
     const target = document.querySelector(selector);
     if (target) {
         // ヘッダーなどがある場合に備え、少し上（100pxなど）に余裕を持って止める
-        const offset = 100; 
+        const offset = 100;
         const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
 
         window.scrollTo({

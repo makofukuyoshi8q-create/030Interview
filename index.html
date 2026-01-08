@@ -34,18 +34,58 @@
         </svg>
 
         <section class="clipboard-container">
+
             <div class="clipboard-sticky-wrapper">
-                <img src="images/board.png" class="board-base">
+                <img src="images/paper-1.png" id="paper-image" class="paper-image">
+
+                <!-- 初期オーバーレイ：paper-1 の上に表示する profile / about -->
+                <div class="paper-overlay" id="paper-overlay" aria-hidden="false">
+                    <div class="paper-content profile-page">
+                        <section class="profile-section">
+                            <h2 class="main-title">[Profile]</h2>
+                            <div class="profile-grid">
+                                <div class="profile-image">
+                                    <img src="images/reina.png" alt="レイナさん">
+                                </div>
+                                <div class="profile-info">
+                                    <p>Name : レイナさん</p>
+                                    <p>Age : 38歳</p>
+                                    <p>From : 東京</p>
+                                    <p>Occupation : カフェ“(03)0”の店長</p>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="about-section">
+                            <h2 class="main-title">[About “(03)0”]</h2>
+                            <div class="about-grid">
+                                <div class="about-info">
+                                    <dl>
+                                        <dt>Category :</dt>
+                                        <dd>カフェ / バー / <br>セレクトショップ</dd>
+                                        <dt>Concept :</dt>
+                                        <dd>ベルリン ・ 東京</dd>
+                                        <dt>Detail :</dt>
+                                        <dd>SNSで“水色ラテ”が話題ベルリン出身のオーナーさんが一点物をセレクトしている</dd>
+                                    </dl>
+                                </div>
+                                <div class="item-image">
+                                    <img src="images/latte.png" alt="Blue latte">
+                                    <p class="caption">ラベンダー × ミルク<br><span>Blue latte</span></p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
                 <div class="paper-stack">
-                    <div class="paper next-sheet">
-                        <div class="noise-overlay"></div>
+                    <div class="paper firstsheet current-sheet">
                         <div class="paper-content prologue-page">
                             <h2 class="main-title">[Prolougue]</h2>
                             <div class="prologue-text">
+                                <!-- ...existing prologue text... -->
                                 <p>私がレイナさんに初めて会ったのは、大学1年生の秋だった。</p>
                                 <p>渋谷と原宿の間の通り沿いに佇む(03)0のお店は<br>
                                     ガラス張りで外からでも洗練された空気が伝わってくる。</p>
-
                                 <p>大学生になって半年が経った頃で、将来やりたいことが<br>
                                     はっきり決まっているわけではなかったけれど、<br>
                                     <span class="highlight-text">「自由に、楽しく、自分の好きなことをしながら<br>
@@ -53,92 +93,20 @@
                                     そんな漠然とした思いを抱えていた当時の私にとって、<br>
                                     そこで働くレイナさんの姿はとても輝いて見えた。
                                 </p>
-
                                 <p>楽しそうに働きながら、自分のやりたいことを形に<br>
                                     しているように見えて、それはまさに私が思い描いていた<br>
                                     “将来なりたい大人像”そのものだった。</p>
-
                                 <p>(03)0の店長としてお店に立つレイナさん。<br>
                                     何を経験し、どんな選択を重ね、どんな生き方をして<br>
                                     ここにたどり着いたのだろう。<br>
                                     そう思い、話を聞いてみることにした。</p>
+                                <h3 class="question-text">Q.人生の中での転機はありますか？</h3>
                             </div>
-                            <h3 class="question-text">Q.人生の中での転機はありますか？</h3>
-                        </div>
-                    </div>
-
-                    <div class="paper current-sheet">
-                        <div class="noise-overlay"></div>
-                        <div class="paper-content profile-page">
-                            <section class="profile-section">
-                                <h2 class="main-title">[Profile]</h2>
-                                <div class="profile-grid">
-                                    <div class="profile-image">
-                                        <img src="images/reina.png" alt="レイナさん">
-                                    </div>
-                                    <div class="profile-info">
-                                        <p>Name : レイナさん</p>
-                                        <p>Age : 38歳</p>
-                                        <p>From : 東京</p>
-                                        <p>Occupation : カフェ“(03)0”の店長</p>
-                                    </div>
-                                </div>
-                            </section>
-
-                            <section class="about-section">
-                                <h2 class="main-title">[About “(03)0”]</h2>
-                                <div class="about-grid">
-                                    <div class="about-info">
-                                        <dl>
-                                            <dt>Category :</dt>
-                                            <dd>カフェ / バー / <br>セレクトショップ</dd>
-                                            <dt>Concept :</dt>
-                                            <dd>ベルリン ・ 東京</dd>
-                                            <dt>Detail :</dt>
-                                            <dd>SNSで“水色ラテ”が話題ベルリン出身のオーナーさんが一点物をセレクトしている</dd>
-                                        </dl>
-                                    </div>
-                                    <div class="item-image">
-                                        <img src="images/latte.png" alt="Blue latte">
-                                        <p class="caption">ラベンダー × ミルク<br><span>Blue latte</span></p>
-                                    </div>
-                                </div>
-                            </section>
                         </div>
                     </div>
                 </div>
-                <img src="images/clip.png" class="clip-hardware">
             </div>
-        </section>
 
-        <section class="tenki-section">
-            <div class="sticky-container">
-                <div class="tree-sequence">
-                    <img src="images/tree-1.png" class="tree-frame active">
-                    <img src="images/tree-2.png" class="tree-frame">
-                    <img src="images/tree-3.png" class="tree-frame">
-                    <img src="images/tree-4.png" class="tree-frame">
-                    <img src="images/tree-5.png" class="tree-frame">
-                    <img src="images/tree-6.png" class="tree-frame">
-                    <img src="images/tree-7.png" class="tree-frame">
-                    <img src="images/tree-8.png" class="tree-frame">
-                    <img src="images/tree-9.png" class="tree-frame">
-                    <img src="images/tree-10.png" class="tree-frame">
-                </div>
-
-                <div class="tenki">
-                    <div class="tenki-text">
-                        <p>私実は2.3年前に婚約していたんですけど<br>
-                            うまくいかなくなって。<br>
-                            誰かに希望を期待して生きるのは難しいなと。</p>
-                        <p>誰かに依存しちゃうと自分の好きなこと<br>
-                            っていうのは見えないと思ったの。</p>
-                        <p>そんな時に偶然この仕事に縁があってね。<br>
-                            これからは本当に自分の好きなことやろうって。</p>
-                        <p><span class="tenki-highlight">これが私の中の「人生の転機」かな。</span></p>
-                    </div>
-                </div>
-            </div>
         </section>
 
 
@@ -181,6 +149,7 @@
         </section>
 
         <script src="functions.js"></script>
+    </body>
 </body>
 
 </html>

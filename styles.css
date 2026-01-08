@@ -12,7 +12,7 @@ body {
 }
 
 .top-page-section {
-    height: 400vh;
+    height: 300vh;
     position: relative;
 }
 
@@ -20,8 +20,8 @@ body {
 .sticky-wrapper {
     position: sticky;
     top: 0;
-    width: 100%;
-    height: 100vh;
+    width: 100vw;
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -32,6 +32,7 @@ body {
 #top-image {
     width: 100%;
     height: 100%;
+    bottom: 0;
     object-fit: cover;
 }
 
@@ -39,14 +40,14 @@ body {
     font-family: 'Kaisei Opti', serif;
     font-size: 5vw;
     position: absolute;
-    margin-top: 250px;
+    top: 45%;
     z-index: 10;
     width: 85%;
     display: flex;
     justify-content: space-between;
     pointer-events: none;
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(5px);
     transition: opacity 0.3s ease-out, transform 0.3s ease-out;
 }
 
@@ -62,9 +63,9 @@ body {
 .clipboard-container {
     position: relative;
     width: 100vw;
-    height: 450vh;
+    height: 300vh;
     /* スクロール遊び分 */
-    margin-top: 300vh;
+    margin-top: 150vh;
     margin-bottom: 50vh;
 }
 
@@ -78,90 +79,63 @@ body {
     /* 紙がめくれた時のはみ出し防止 */
 }
 
-/* 全てのパーツを中央に整列させるための共通設定 */
-.board-base,
-.clip-hardware,
-.paper-stack {
+/* 紙画像を常に画面中央に表示、高さを画面に合わせ幅は自動にする */
+.clipboard-sticky-wrapper {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.clipboard-sticky-wrapper .paper-image {
     position: absolute;
-    /* fixedからabsoluteに変更 */
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-}
-
-.board-base {
-    z-index: 1;
-    width: 80vw;
-    height: auto;
+    height: 100vh;
+    /* 指示通り高さを画面いっぱいに */
+    width: auto;
+    /* 幅は自動 */
     object-fit: contain;
-}
-
-.clip-hardware {
-    z-index: 10;
-    width: 80vw;
-    height: auto;
-    object-fit: contain;
-    pointer-events: none;
-}
-
-/* 紙のサイズと位置（現状の数値を維持） */
-.paper-stack {
-    z-index: 5;
-    width: 33vw;
-    height: 80vh;
-    top: 51%;
-    /* 板に合わせた微調整 */
-}
-
-/* 紙自体の設定は変更なしでOK */
-.paper {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #fefdf7;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    transform-origin: top;
-    transition: transform 3.0s cubic-bezier(0.4, 0, 0.2, 1);
-    overflow: hidden;
-    backface-visibility: hidden;
-    /* 裏側を見せない */
-}
-
-.noise-overlay {
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    filter: url(#noiseFilter);
-    opacity: 0.3;
-    pointer-events: none;
     z-index: 1;
+    pointer-events: none;
+    /* 画像の上のテキスト操作を阻害しない */
 }
 
-.paper-content {
+/* paper-stack を画像より上に表示 */
+.clipboard-sticky-wrapper .paper-stack {
     position: relative;
-    padding: 60px 10px 100px 10px;
+    width: 100%;
+    height: 100vh;
+    z-index: 8;
+    /* 画像（1） / overlay（4）より上に */
+    pointer-events: auto;
 }
 
-/* 下の紙（2枚目） */
-.next-sheet {
-    z-index: 1;
+/* テキストは紙の上に重なり、スクロールや選択を可能にする */
+.clipboard-sticky-wrapper .paper-content {
+    position: absolute;
+    top: 51%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    width: calc(83vh * 0.7);
+    height: 83vh;
+    overflow-y: auto;
+    /* 長い文をスクロール可能に */
+    padding: 6vh 2vw 3vh 2vw;
+    pointer-events: auto;
+    /* テキストやリンクを操作可能に */
+    background: transparent;
+    box-sizing: border-box;
+    color: #2c4463;
 }
 
-/* 上の紙（1枚目） */
-.current-sheet {
-    z-index: 2;
+/* 内部の段落余白は既存クラスで制御されるため重複しないように */
+.clipboard-sticky-wrapper .paper-content p {
+    margin-bottom: 1.2em
 }
-
-/* めくりアニメーション */
-.current-sheet.is-flipped {
-    transform: rotateX(-120deg);
-}
-
-
 
 
 
@@ -176,52 +150,46 @@ body {
 /* タイトル設定 */
 .main-title {
     text-align: center;
-    font-size: 33px;
+    font-size: 5.0vh;
     letter-spacing: 0.05em;
-    margin-top: 0;
-    margin-bottom: 20px;
+    margin: 0;
 }
 
 .profile-section {
     position: relative;
     /* イラストを自由に配置するための基準 */
     width: 100%;
-    margin-bottom: 5vh;
+    height: 45%;
+    margin-bottom: 5%;
 }
 
 .profile-grid {
     display: grid;
-    grid-template-columns: 100% 1fr;
-    column-gap: 30px;
+    grid-template-columns: 40% 1fr;
     align-items: start;
+    margin-top: 3%;
 }
 
 .profile-image {
-    position: absolute;
-    left: -45px;
-    /* ここで左端からの距離を指定 */
-    top: 30px;
+    grid-column: 1;
+    justify-self: center;
+    align-self: center;
 }
 
 .profile-image img {
-    width: 19vw;
-    /* イラストのサイズ */
-    height: auto;
+    width: auto;
+    height: 23vh;
 }
 
 .profile-info p {
-    font-size: 1.1vw;
-    line-height: 1.1;
-    margin: 0 0 6px;
+    font-size: 1.9vh;
+    line-height: 0.7vh;
     font-weight: bold;
 }
 
 /* 紹介文：イラストと重ならないように左側に余白を作る */
 .profile-info {
-    margin-left: 11.5vw;
-    margin-bottom: 5vh;
-    margin-top: 1vh;
-    line-height: 1.2;
+    margin-top: 2.0vh;
 }
 
 /* --- 下段：About部分のレイアウト --- */
@@ -229,17 +197,17 @@ body {
 .about-section {
     position: relative;
     width: 100%;
+    height: 50%;
     margin-top: 3vh;
     /* プロフィールとの間隔 */
 }
 
 .about-grid {
-    display: flex;
-    justify-content: space-between;
-    /* 左右の両端に振り分ける */
-    align-items: flex-start;
-    padding-left: 5%;
-    margin-top: 30px;
+    display: grid;
+    grid-template-columns: 60% 1fr;
+    align-items: start;
+    margin-top: 3%;
+    margin-left: 1vh;
 }
 
 /* 左側：説明文（Category, Concept, Detail） */
@@ -247,13 +215,13 @@ body {
     display: grid;
     /* 項目名(Category:)と中身を 2列に並べる */
     grid-template-columns: auto 1fr;
-    gap: 8px 10px;
+    gap: 1vh;
     /* 縦と横の隙間 */
-    margin-top: 20px;
+    margin-top: 5%;
 }
 
 .about-info dt {
-    font-size: 1.0vw;
+    font-size: 2.0vh;
     font-weight: bold;
     color: #2c4463;
     white-space: nowrap;
@@ -261,31 +229,25 @@ body {
 }
 
 .about-info dd {
-    font-size: 1.0vw;
+    font-size: 1.8vh;
     font-weight: bold;
-    margin-right: -20px;
     margin-left: 0%;
-    line-height: 1.2;
+    line-height: 1.3;
 }
 
 /* 右側：ラテ画像とキャプション */
 .item-image {
     text-align: center;
-    margin-top: -30px;
-    /* 画像を少し上に微調整 */
-
 }
 
 .item-image img {
-    width: 13vw;
-    /* グラスのサイズ */
-    height: auto;
+    width: auto;
+    height: 23vh;
     display: block;
-    margin-top: 10px;
 }
 
 .item-image .caption {
-    font-size: 0.7vw;
+    font-size: 1.8vh;
     margin-top: 0px;
     line-height: 1.2;
     color: #2c4463;
@@ -304,14 +266,15 @@ body {
 
 .prologue-page {
     text-align: center;
-    /* 文章を中央揃えに */
     color: #2c4463;
     font-family: 'Kaisei Opti', serif;
-    margin-top: -2vh;
+    /* 中央表示に合わせてマージン調整（負のマージンを削除） */
+    margin-top: 0;
+    box-sizing: border-box;
 }
 
 .prologue-text {
-    font-size: 0.9vw;
+    font-size: 1.6vh;
     /* 少し小さめで繊細な印象に */
     line-height: 1.8;
     /* 行間を広く取って読みやすく */
@@ -327,17 +290,102 @@ body {
 .highlight-text {
     font-weight: bold;
     font-weight: 900;
-    font-size: 1.1vw;
+    font-size: 2.0vh;
     display: inline-block;
     line-height: 1.2;
     margin: 15px 0;
 }
 
 .question-text {
-    font-size: 1.6vw;
+    font-size: 2.5vh;
     margin-top: 0;
     letter-spacing: 0.05em;
     font-weight: bold;
+}
+
+/* オーバーレイが非表示になったら完全に操作不可にする */
+.paper-overlay[aria-hidden="true"] {
+    pointer-events: none;
+    visibility: hidden;
+    opacity: 0 !important;
+}
+
+
+/* オーバーレイ（初期の profile/about） */
+.paper-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 4;
+    pointer-events: auto;
+    transition: opacity 0.25s ease-out;
+    /* ここも短くしてより素早くフェード */
+    will-change: opacity;
+}
+
+/* 表示時は完全に中央で浮かび上がる */
+.current-sheet.revealed .paper-content.prologue-page {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0);
+    pointer-events: auto;
+}
+
+
+/* 以下は prologue を確実に前面に出し、overlay を完全に退かせる上書きルール */
+.paper-overlay[aria-hidden="true"] {
+    display: none !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+}
+
+/* overlay の通常表示時は紙より下に抑える（必要なら数値を調整） */
+.paper-overlay {
+    z-index: 40;
+}
+
+/* paper-stack を十分に前面に */
+.clipboard-sticky-wrapper .paper-stack {
+    z-index: 200;
+    /* 画像やoverlayより上に確実に出す */
+    pointer-events: auto;
+}
+
+/* Prologue（本文）を最前面にし、中央かつスクロール可能にする */
+.paper-content.prologue-page {
+    position: absolute;
+    top: 53%;
+    left: 50%;
+    transform: translate(-50%, -50%) translateY(10px);
+    opacity: 0;
+    transition: opacity 0.45s ease-out, transform 0.45s ease-out;
+    z-index: 300;
+    /* 最前面 */
+    pointer-events: none;
+    width: min(780px, 64vw);
+    max-height: 86vh;
+    overflow-y: auto;
+    /* 長い本文を内部でスクロール */
+    padding: 4vh 3vw;
+    border-radius: 6px;
+    box-sizing: border-box;
+}
+
+/* 表示時（paper-13 到達で付く .revealed） */
+.current-sheet.revealed .paper-content.prologue-page {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0);
+    pointer-events: auto;
+}
+
+/* 細かい調整：画像が pointer を遮らないように */
+.clipboard-sticky-wrapper .paper-image {
+    pointer-events: none;
 }
 
 
@@ -348,7 +396,7 @@ body {
 .tenki-section {
     position: relative;
     width: 100vw;
-    height: 400vh;
+    height: 300vh;
     /* 4枚分くらいの長さ。ここがスクロールの遊びになります */
 }
 
@@ -369,8 +417,8 @@ body {
     /* 親(sticky-container)全体に広げる */
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     z-index: 1;
 }
 
@@ -379,8 +427,8 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    object-fit: contain; 
+    height: auto;
+    object-fit: contain;
     object-position: bottom;
     opacity: 0;
     transition: opacity 0.05s linear;
@@ -411,10 +459,14 @@ body {
 }
 
 .tenki-highlight {
-    display: inline-block; /* 余白や行間を制御しやすくするため */
-    font-size: 1.6vw;      /* 周りの 1.2vw より一回り大きく */
-    font-weight: 900;      /* 一番太く */
-    margin-top: 20px;      /* 前の行と少し距離を置く */
+    display: inline-block;
+    /* 余白や行間を制御しやすくするため */
+    font-size: 1.6vw;
+    /* 周りの 1.2vw より一回り大きく */
+    font-weight: 900;
+    /* 一番太く */
+    margin-top: 20px;
+    /* 前の行と少し距離を置く */
 }
 
 
@@ -426,7 +478,8 @@ body {
 .menu-clipboard-section {
     position: relative;
     width: 100vw;
-    height: 200vh; /* スクロール留まり分 */
+    height: 200vh;
+    /* スクロール留まり分 */
     font-family: 'Kaisei Opti', serif;
     text-align: center;
     color: #2c4463;
@@ -436,15 +489,19 @@ body {
 /* 横長用のボード調整 */
 .board-base.landscape,
 .clip-hardware.landscape {
-    width: 90vw; /* 縦型より横に広く */
+    width: 90vw;
+    /* 縦型より横に広く */
     height: auto;
 }
 
 /* 横長用の紙の束 */
 .paper-stack.landscape {
-    width: 66vw;  /* 横幅を広く */
-    height: 77vh; /* 高さを抑える */
-    top: 52%;     /* ボードの位置に合わせる */
+    width: 66vw;
+    /* 横幅を広く */
+    height: 77vh;
+    /* 高さを抑える */
+    top: 52%;
+    /* ボードの位置に合わせる */
 }
 
 .paper.landscape {
@@ -455,37 +512,49 @@ body {
 /* Menuの中身のレイアウト（横並びを強調） */
 .menu-grid {
     display: flex;
-    justify-content: center; /* 全体を中央寄せ */
-    align-items: center;     /* 垂直方向の中央寄せ */
-    height: 100%;            /* 親要素（paper-content）の高さに合わせる */
-    gap: 2vw;                /* アイテム同士の間隔を均等に */
+    justify-content: center;
+    /* 全体を中央寄せ */
+    align-items: center;
+    /* 垂直方向の中央寄せ */
+    height: 100%;
+    /* 親要素（paper-content）の高さに合わせる */
+    gap: 2vw;
+    /* アイテム同士の間隔を均等に */
     padding: 0;
     margin: 0;
 }
 
 /* イラスト（アイコン）の基本設定 */
 .menu-icon {
-    width: 130%;             /* 親要素（menu-item）の幅に合わせる */
+    width: 130%;
+    /* 親要素（menu-item）の幅に合わせる */
     height: auto;
     margin-top: 0vh;
-    margin-bottom: -5vh;        /* 上下の余白のみ設定（左右はauto） */
-    display: block;          /* 余計な隙間を消す */
+    margin-bottom: -5vh;
+    /* 上下の余白のみ設定（左右はauto） */
+    display: block;
+    /* 余計な隙間を消す */
     transition: transform 0.3s ease;
     cursor: pointer;
 }
 
 /* カーソルを当てた（ホバー）時の動き */
 .menu-item:hover .menu-icon {
-    transform: scale(1.15); /* 1.15倍にズーム */
-    filter: brightness(1.1); /* 少し明るくして「反応してる感」を出す */
+    transform: scale(1.15);
+    /* 1.15倍にズーム */
+    filter: brightness(1.1);
+    /* 少し明るくして「反応してる感」を出す */
 }
 
 .menu-item {
-    flex: 1;                 /* 3等分にする */
-    max-width: 30%;          /* 広がりすぎ防止 */
+    flex: 1;
+    /* 3等分にする */
+    max-width: 30%;
+    /* 広がりすぎ防止 */
     display: flex;
     flex-direction: column;
-    align-items: center;     /* 水平方向の中央 */
+    align-items: center;
+    /* 水平方向の中央 */
     text-align: center;
     cursor: pointer;
     font-family: 'Kaisei Opti', serif;
@@ -493,8 +562,10 @@ body {
 
 /* リンクテキスト（章タイトルなど）にもホバー効果 */
 .menu-item:hover .chapter-title {
-    color: #4a6fa5; /* ホバー時に少し色を変える（任意） */
-    text-decoration: underline; /* 下線を表示 */
+    color: #4a6fa5;
+    /* ホバー時に少し色を変える（任意） */
+    text-decoration: underline;
+    /* 下線を表示 */
 }
 
 .menu-title {
@@ -534,26 +605,36 @@ body {
     top: 50% !important;
     left: 50% !important;
     transform: translate(-50%, -50%) !important;
-    width: 80vw !important; /* index.htmlの縦型と同じ */
+    width: 80vw !important;
+    /* index.htmlの縦型と同じ */
     height: auto !important;
 }
 
-.chapter-container .board-base { z-index: 1; }
-.chapter-container .clip-hardware { z-index: 10; pointer-events: none; }
+.chapter-container .board-base {
+    z-index: 1;
+}
+
+.chapter-container .clip-hardware {
+    z-index: 10;
+    pointer-events: none;
+}
 
 /* 3. 紙の「外枠」：ボードの中にピタッと固定（動かさない） */
 .chapter-container .paper.ch1-paper {
     position: absolute !important;
-    top: 51% !important; /* 金具の位置に合わせた微調整 */
+    top: 51% !important;
+    /* 金具の位置に合わせた微調整 */
     left: 50% !important;
-    transform: translate(-50%, -50%) rotateX(0deg) !important; /* めくれを0に強制 */
-    
+    transform: translate(-50%, -50%) rotateX(0deg) !important;
+    /* めくれを0に強制 */
+
     /* ボードの内側に収まるサイズ */
     width: 32.5vw !important;
     height: 77vh !important;
-    
+
     background-color: #fefdf7 !important;
-    overflow: hidden !important; /* 紙自体はスクロールさせない */
+    overflow: hidden !important;
+    /* 紙自体はスクロールさせない */
     z-index: 5 !important;
     transition: none !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -566,7 +647,8 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 2; /* 文字の下 */
+    z-index: 2;
+    /* 文字の下 */
     opacity: 0.4;
     pointer-events: none;
 }
@@ -578,15 +660,19 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    overflow-y: auto; /* ここでスクロールを発生 */
-    z-index: 3; /* ノイズの上 */
-    scrollbar-width: none; /* Firefox */
+    overflow-y: auto;
+    /* ここでスクロールを発生 */
+    z-index: 3;
+    /* ノイズの上 */
+    scrollbar-width: none;
+    /* Firefox */
 }
 
 
 /* 6. インタビュー文章のレイアウト */
 .scrollable-area .paper-content {
-    padding: 110px 40px 120px 40px !important; /* クリップに被らないよう上部を広く */
+    padding: 110px 40px 120px 40px !important;
+    /* クリップに被らないよう上部を広く */
 }
 
 .interview-block {
