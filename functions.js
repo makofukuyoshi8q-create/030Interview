@@ -102,36 +102,40 @@ window.addEventListener('scroll', () => {
     window.addEventListener('scroll', onScroll, { passive: true });
 })();
 
+
+
+
+/// すでに記述がある場合は、このロジックに差し替えてください
 window.addEventListener('scroll', () => {
-    // クラス名を実際のHTMLに合わせて指定
-    const section = document.querySelector('.tenki-section');
-    const frames = document.querySelectorAll('.tree-frame');
+    const triggerSection = document.getElementById('turning-point-trigger');
+    const fullTreeImg = document.getElementById('turning-tree-full');
 
-    if (!section || frames.length === 0) return;
+    if (!triggerSection || !fullTreeImg) return;
 
-    const sectionTop = section.offsetTop;
-    const sectionHeight = section.offsetHeight - window.innerHeight;
-    const scrollY = window.scrollY - sectionTop;
+    const scrollY = window.scrollY;
+    const sectionTop = triggerSection.offsetTop;
+    const sectionHeight = triggerSection.offsetHeight - window.innerHeight;
 
-    // セクション内にいるときだけ実行
-    if (scrollY >= 0 && scrollY <= sectionHeight) {
-        const progress = scrollY / sectionHeight;
+    // セクションに入っている間だけ計算
+    let progress = (scrollY - sectionTop) / sectionHeight;
+    progress = Math.max(0, Math.min(1, progress * 1.5));
 
-        // 10枚の画像から、現在の進捗に合うインデックスを計算
-        const frameIndex = Math.min(
-            frames.length - 1,
-            Math.floor(progress * frames.length)
-        );
+    // tree-1 〜 tree-7
+    const totalTreeFrames = 7;
+    // progressが1のときにちょうど7枚目になるように計算
+    const treeIndex = Math.min(
+        totalTreeFrames,
+        Math.floor(progress * (totalTreeFrames - 0.01)) + 1
+    );
 
-        frames.forEach((frame, index) => {
-            if (index === frameIndex) {
-                frame.classList.add('active');
-            } else {
-                frame.classList.remove('active');
-            }
-        });
+    const nextSrc = `images/tree-${treeIndex}.png`;
+    if (fullTreeImg.getAttribute('src') !== nextSrc) {
+        fullTreeImg.src = nextSrc;
     }
 });
+
+
+
 
 
 function scrollToSection(selector) {

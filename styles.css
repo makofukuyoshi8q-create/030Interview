@@ -11,19 +11,18 @@ body {
     overflow-x: hidden;
 }
 
+/* top-page-section の修正 */
 .top-page-section {
     height: 300vh;
     position: relative;
 }
 
-/* 画面に固定する部分 */
 .sticky-wrapper {
     position: sticky;
     top: 0;
     width: 100vw;
-    height: auto;
+    height: 100vh; /* height: auto から 100vh に変更 */
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
     overflow: hidden;
@@ -31,16 +30,17 @@ body {
 
 #top-image {
     width: 100%;
-    height: 100%;
-    bottom: 0;
-    object-fit: cover;
+    height: 100vh;        /* 画面いっぱいの高さに固定 */
+    object-fit: cover;    /* 画面幅に合わせて拡大 */
+    object-position: bottom; /* 画像の下端を画面の下に合わせる（上が切れる） */
+    display: block;
 }
 
 .top-title {
     font-family: 'Kaisei Opti', serif;
     font-size: 5vw;
     position: absolute;
-    top: 45%;
+    bottom: 40vh;
     z-index: 10;
     width: 85%;
     display: flex;
@@ -393,83 +393,61 @@ body {
 
 
 
-.tenki-section {
+/* 転機セクション全体（スクロールの長さ） */
+.turning-point-section {
+    height: 400vh; 
     position: relative;
-    width: 100vw;
-    height: 300vh;
-    /* 4枚分くらいの長さ。ここがスクロールの遊びになります */
+    background: transparent;
 }
 
-/* 画面に張り付く共通の土台 */
-.sticky-container {
+/* 画面に固定するコンテナ */
+.turning-point-sticky {
     position: sticky;
     top: 0;
     width: 100vw;
     height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     overflow: hidden;
 }
 
-.tree-sequence {
-    position: absolute;
-    /* 親(sticky-container)全体に広げる */
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 1;
-}
-
-.tree-frame {
+/* 画像コンテナ */
+.tree-background-container {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: auto;
-    object-fit: contain;
-    object-position: bottom;
-    opacity: 0;
-    transition: opacity 0.05s linear;
+    height: 100vh;
+    z-index: 1;
 }
 
-.tree-frame.active {
-    opacity: 1;
+#turning-tree-full {
+    width: 100%;
+    height: 100%;
+    /* --- ここが重要 --- */
+    object-fit: cover;      /* 画面幅に合わせて拡大 */
+    object-position: bottom; /* 常に画像の下部を画面の下端に合わせる（上が切れる設定） */
+    display: block;
 }
 
-/* 文字の設定：画像より上のレイヤーで中央に配置 */
-.tenki {
-    position: relative;
-    z-index: 10;
-    /* 木(z-index: 1)より手前 */
+/* 文字の位置調整 */
+.turning-message-overlay {
+    position: absolute; /* 画像の上に自由に配置 */
+    top: 45%;          /* 画面中央付近 */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
     text-align: center;
     color: #2c4463;
-    max-width: 800px;
-    padding: 0 20px;
     font-family: 'Kaisei Opti', serif;
-    margin-top: -5vh;
+    font-size: 1.8vh;
+    line-height: 2.2;
+    width: 90%;
 }
 
-.tenki-text {
-    font-size: 1.2vw;
-    line-height: 2.5;
+.turning-highlight {
+    margin-top: 30px;
     font-weight: bold;
-    letter-spacing: 0.02em;
+    font-size: 2.5vh;
 }
-
-.tenki-highlight {
-    display: inline-block;
-    /* 余白や行間を制御しやすくするため */
-    font-size: 1.6vw;
-    /* 周りの 1.2vw より一回り大きく */
-    font-weight: 900;
-    /* 一番太く */
-    margin-top: 20px;
-    /* 前の行と少し距離を置く */
-}
-
-
 
 
 
