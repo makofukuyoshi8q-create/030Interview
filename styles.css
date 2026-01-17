@@ -21,7 +21,8 @@ body {
     position: sticky;
     top: 0;
     width: 100vw;
-    height: 100vh; /* height: auto から 100vh に変更 */
+    height: 100vh;
+    /* height: auto から 100vh に変更 */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -30,9 +31,12 @@ body {
 
 #top-image {
     width: 100%;
-    height: 100vh;        /* 画面いっぱいの高さに固定 */
-    object-fit: cover;    /* 画面幅に合わせて拡大 */
-    object-position: bottom; /* 画像の下端を画面の下に合わせる（上が切れる） */
+    height: 100vh;
+    /* 画面いっぱいの高さに固定 */
+    object-fit: cover;
+    /* 画面幅に合わせて拡大 */
+    object-position: bottom;
+    /* 画像の下端を画面の下に合わせる（上が切れる） */
     display: block;
 }
 
@@ -58,6 +62,11 @@ body {
 
 
 
+
+
+
+
+
 /* クリップボード全体のコンテナ */
 /* 外枠：スクロールできる全長 */
 .clipboard-container {
@@ -65,7 +74,7 @@ body {
     width: 100vw;
     height: 300vh;
     /* スクロール遊び分 */
-    margin-top: 150vh;
+    margin-top: 100vh;
     margin-bottom: 50vh;
 }
 
@@ -136,6 +145,8 @@ body {
 .clipboard-sticky-wrapper .paper-content p {
     margin-bottom: 1.2em
 }
+
+
 
 
 
@@ -395,7 +406,7 @@ body {
 
 /* 転機セクション全体（スクロールの長さ） */
 .turning-point-section {
-    height: 400vh; 
+    height: 400vh;
     position: relative;
     background: transparent;
 }
@@ -423,15 +434,19 @@ body {
     width: 100%;
     height: 100%;
     /* --- ここが重要 --- */
-    object-fit: cover;      /* 画面幅に合わせて拡大 */
-    object-position: bottom; /* 常に画像の下部を画面の下端に合わせる（上が切れる設定） */
+    object-fit: cover;
+    /* 画面幅に合わせて拡大 */
+    object-position: bottom;
+    /* 常に画像の下部を画面の下端に合わせる（上が切れる設定） */
     display: block;
 }
 
 /* 文字の位置調整 */
 .turning-message-overlay {
-    position: absolute; /* 画像の上に自由に配置 */
-    top: 45%;          /* 画面中央付近 */
+    position: absolute;
+    /* 画像の上に自由に配置 */
+    top: 45%;
+    /* 画面中央付近 */
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 2;
@@ -462,6 +477,7 @@ body {
 .menu-board-section {
     width: 100vw;
     height: 100vh;
+    margin-top: 50vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -490,7 +506,8 @@ body {
     position: absolute;
     top: 53%;
     left: 50%;
-    transform: translate(-50%, -50%); /* ボードの盤面に合わせる */
+    transform: translate(-50%, -50%);
+    /* ボードの盤面に合わせる */
     width: calc(65vh * 1.5);
     height: 65vh;
     display: flex;
@@ -502,7 +519,7 @@ body {
 .menu-top-title {
     font-size: 5vh;
     color: #2c4463;
-    margin-bottom: 1vh;
+    margin-bottom: 0;
     letter-spacing: 0.05em;
 }
 
@@ -512,7 +529,9 @@ body {
     height: 45vh;
     display: flex;
     justify-content: space-around;
-    align-items: flex-end; /* ドリンクの底を基準にする */
+    align-items: flex-end;
+    /* ドリンクの底を基準にする */
+    transform: translateY(-2vh);
 }
 
 /* 個別リンク */
@@ -528,11 +547,13 @@ body {
 
 /* --- 段差（高さの調整） --- */
 .step-up {
-    margin-bottom: 5vh; /* 1章と3章を浮かせる */
+    margin-bottom: 5vh;
+    /* 1章と3章を浮かせる */
 }
 
 .step-mid {
-    margin-bottom: 0vh; /* 2章はそのまま */
+    margin-bottom: 0vh;
+    /* 2章はそのまま */
 }
 
 /* ドリンクのサイズ：以前より大きく */
@@ -545,7 +566,6 @@ body {
 .menu-drink-icon {
     width: auto;
     height: 100%;
-    filter: drop-shadow(0 15px 25px rgba(0,0,0,0.2));
 }
 
 /* テキスト：ドリンクの上 */
@@ -576,10 +596,133 @@ body {
     color: #5a6f87;
     margin: 0;
     text-align: center;
-    min-height: 3em; /* セリフの長さが変わっても高さが崩れないように */
+    min-height: 3em;
+    /* セリフの長さが変わっても高さが崩れないように */
 }
 
 /* ホバー演出 */
 .menu-item-link:hover {
     transform: scale(1.08);
+}
+
+
+
+
+
+
+
+
+
+
+/* --- Chapter1 メインビジュアル（最新レイアウト） --- */
+
+/* 1. ページ読み込み時の白いフェード */
+.page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    z-index: 9999;
+    pointer-events: none;
+    animation: fadeOutLoader 2.0s ease-in-out forwards;
+}
+
+@keyframes fadeOutLoader {
+    0% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+.chapter-top-visual {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.visual-container {
+    position: sticky;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    /* height: auto から 100vh に変更 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* 画像は鮮明に、かつアニメーションで表示 */
+.main-visual-img {
+    width: 100%;
+    height: 100vh;
+    object-fit: cover;
+    object-position: bottom;
+    display: block;
+}
+
+@keyframes simpleFadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
+/* タイトルの左右分割レイアウト */
+.title-split-container {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    /* 左右の端に寄せる */
+    padding: 0 10% 0 5%;
+    /* 中央の人物を避けるための左右余白（適宜調整） */
+    box-sizing: border-box;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.title-left,
+.title-right {
+    font-family: 'Kaisei Opti', serif;
+    font-size: 8vh;
+    color: #2c4463;
+    margin: 0;
+    opacity: 0;
+    animation: titlePop 1.5s ease-out 1.2s forwards;
+}
+
+@keyframes titlePop {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* 右下の第1章 */
+.chapter-number-badge {
+    position: absolute;
+    right: 10%;
+    bottom: 5%;
+    font-family: 'Kaisei Opti', serif;
+    font-size: 6vh;
+    font-weight: bold;
+    color: #2c4463;
+    opacity: 0;
+    animation: simpleFadeIn 1.0s ease-out 1.8s forwards;
+    z-index: 10;
 }
