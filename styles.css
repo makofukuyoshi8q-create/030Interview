@@ -452,220 +452,134 @@ body {
 
 
 
-/* 横型クリップボード専用セクション */
-.menu-clipboard-section {
-    position: relative;
-    width: 100vw;
-    height: 200vh;
-    /* スクロール留まり分 */
-    font-family: 'Kaisei Opti', serif;
-    text-align: center;
-    color: #2c4463;
-    margin-top: 100vh;
-}
-
-/* 横長用のボード調整 */
-.board-base.landscape,
-.clip-hardware.landscape {
-    width: 90vw;
-    /* 縦型より横に広く */
-    height: auto;
-}
-
-/* 横長用の紙の束 */
-.paper-stack.landscape {
-    width: 66vw;
-    /* 横幅を広く */
-    height: 77vh;
-    /* 高さを抑える */
-    top: 52%;
-    /* ボードの位置に合わせる */
-}
-
-.paper.landscape {
-    width: 100%;
-    height: 100%;
-}
-
-/* Menuの中身のレイアウト（横並びを強調） */
-.menu-grid {
-    display: flex;
-    justify-content: center;
-    /* 全体を中央寄せ */
-    align-items: center;
-    /* 垂直方向の中央寄せ */
-    height: 100%;
-    /* 親要素（paper-content）の高さに合わせる */
-    gap: 2vw;
-    /* アイテム同士の間隔を均等に */
-    padding: 0;
-    margin: 0;
-}
-
-/* イラスト（アイコン）の基本設定 */
-.menu-icon {
-    width: 130%;
-    /* 親要素（menu-item）の幅に合わせる */
-    height: auto;
-    margin-top: 0vh;
-    margin-bottom: -5vh;
-    /* 上下の余白のみ設定（左右はauto） */
-    display: block;
-    /* 余計な隙間を消す */
-    transition: transform 0.3s ease;
-    cursor: pointer;
-}
-
-/* カーソルを当てた（ホバー）時の動き */
-.menu-item:hover .menu-icon {
-    transform: scale(1.15);
-    /* 1.15倍にズーム */
-    filter: brightness(1.1);
-    /* 少し明るくして「反応してる感」を出す */
-}
-
-.menu-item {
-    flex: 1;
-    /* 3等分にする */
-    max-width: 30%;
-    /* 広がりすぎ防止 */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    /* 水平方向の中央 */
-    text-align: center;
-    cursor: pointer;
-    font-family: 'Kaisei Opti', serif;
-}
-
-/* リンクテキスト（章タイトルなど）にもホバー効果 */
-.menu-item:hover .chapter-title {
-    color: #4a6fa5;
-    /* ホバー時に少し色を変える（任意） */
-    text-decoration: underline;
-    /* 下線を表示 */
-}
-
-.menu-title {
-    font-size: 3.5vw;
-    margin-bottom: 2vh;
-}
-
-.chapter-quote {
-    font-size: 1.2vw;
-    margin-top: -1vh;
-    margin-bottom: 0;
-}
 
 
 
 
-/* ============================================================
-   CHAPTERページ専用：紙の固定 ＆ 中身スクロール完全版
-   ============================================================ */
 
-/* 1. クリップボード全体を画面中央に固定 */
-.chapter-container .clipboard-fixed-wrapper {
-    position: sticky;
-    top: 0;
+
+/* セクション全体 */
+.menu-board-section {
     width: 100vw;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1;
+    position: relative;
+    font-family: 'Kaisei Opti', serif
 }
 
-/* 2. ボード(板)と金具のサイズと位置を index と統一 */
-.chapter-container .board-base,
-.chapter-container .clip-hardware {
-    position: absolute !important;
-    top: 50% !important;
-    left: 50% !important;
-    transform: translate(-50%, -50%) !important;
-    width: 80vw !important;
-    /* index.htmlの縦型と同じ */
-    height: auto !important;
-}
-
-.chapter-container .board-base {
-    z-index: 1;
-}
-
-.chapter-container .clip-hardware {
-    z-index: 10;
-    pointer-events: none;
-}
-
-/* 3. 紙の「外枠」：ボードの中にピタッと固定（動かさない） */
-.chapter-container .paper.ch1-paper {
-    position: absolute !important;
-    top: 51% !important;
-    /* 金具の位置に合わせた微調整 */
-    left: 50% !important;
-    transform: translate(-50%, -50%) rotateX(0deg) !important;
-    /* めくれを0に強制 */
-
-    /* ボードの内側に収まるサイズ */
-    width: 32.5vw !important;
-    height: 77vh !important;
-
-    background-color: #fefdf7 !important;
-    overflow: hidden !important;
-    /* 紙自体はスクロールさせない */
-    z-index: 5 !important;
-    transition: none !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* 4. ノイズレイヤー：紙の枠内に固定して質感を出す */
-.chapter-container .ch1-paper .noise-overlay {
-    position: absolute !important;
-    top: 0;
-    left: 0;
+.menu-full-container {
+    position: relative;
     width: 100%;
     height: 100%;
-    z-index: 2;
-    /* 文字の下 */
-    opacity: 0.4;
-    pointer-events: none;
 }
 
-/* 5. 【重要】文字だけが動くスクロールエリア */
-.scrollable-area {
+.board-full-img {
+    width: auto;
+    height: 100vh;
+    object-fit: contain;
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
-    /* ここでスクロールを発生 */
-    z-index: 3;
-    /* ノイズの上 */
-    scrollbar-width: none;
-    /* Firefox */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
-
-/* 6. インタビュー文章のレイアウト */
-.scrollable-area .paper-content {
-    padding: 110px 40px 120px 40px !important;
-    /* クリップに被らないよう上部を広く */
+/* ボード上の全要素を包むレイヤー */
+.menu-content-overlay {
+    position: absolute;
+    top: 53%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* ボードの盤面に合わせる */
+    width: calc(65vh * 1.5);
+    height: 65vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.interview-block {
-    font-family: 'Kaisei Opti', serif;
+/* [Menu] タイトル */
+.menu-top-title {
+    font-size: 5vh;
     color: #2c4463;
+    margin-bottom: 1vh;
+    letter-spacing: 0.05em;
 }
 
-.question {
-    font-size: 16px;
-    line-height: 1.5;
-    margin-bottom: 2.0em;
+/* アイテムを横に並べるエリア */
+.menu-items-layer {
+    width: 100%;
+    height: 45vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end; /* ドリンクの底を基準にする */
 }
 
-.answer {
-    font-size: 18px;
-    line-height: 1.8em;
-    margin-bottom: 5.0em;
+/* 個別リンク */
+.menu-item-link {
+    text-decoration: none;
+    width: 30%;
+    height: 85%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.3s ease;
+}
+
+/* --- 段差（高さの調整） --- */
+.step-up {
+    margin-bottom: 5vh; /* 1章と3章を浮かせる */
+}
+
+.step-mid {
+    margin-bottom: 0vh; /* 2章はそのまま */
+}
+
+/* ドリンクのサイズ：以前より大きく */
+.menu-icon-wrapper {
+    height: 75%;
+    width: auto;
+    margin-bottom: 1vh;
+}
+
+.menu-drink-icon {
+    width: auto;
+    height: 100%;
+    filter: drop-shadow(0 15px 25px rgba(0,0,0,0.2));
+}
+
+/* テキスト：ドリンクの上 */
+.chapter-label-group {
+    text-align: center;
+    margin-bottom: 1vh;
+}
+
+.chapter-num {
+    font-size: 2.3vh;
+    font-weight: bold;
+    color: #2c4463;
+    margin: 0;
+}
+
+.chapter-title {
+    font-size: 2.6vh;
+    margin: 0;
+    font-weight: bold;
+    color: #2c4463;
+    white-space: nowrap;
+}
+
+/* テキスト：ドリンクの下（セリフ） */
+.chapter-quote {
+    font-size: 2vh;
+    line-height: 1.4;
+    color: #5a6f87;
+    margin: 0;
+    text-align: center;
+    min-height: 3em; /* セリフの長さが変わっても高さが崩れないように */
+}
+
+/* ホバー演出 */
+.menu-item-link:hover {
+    transform: scale(1.08);
 }
