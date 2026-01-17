@@ -33,14 +33,13 @@
             </filter>
         </svg>
 
-        <section class="clipboard-container">
 
+        <section class="clipboard-container">
             <div class="clipboard-sticky-wrapper">
                 <img src="images/paper-1.png" id="paper-image" class="paper-image">
 
-                <!-- 初期オーバーレイ：paper-1 の上に表示する profile / about -->
-                <div class="paper-overlay" id="paper-overlay" aria-hidden="false">
-                    <div class="paper-content profile-page">
+                <div id="first-page" class="paper-content-container kaisei-font">
+                    <div class="inner-block">
                         <section class="profile-section">
                             <h2 class="main-title">[Profile]</h2>
                             <div class="profile-grid">
@@ -77,9 +76,10 @@
                         </section>
                     </div>
                 </div>
-                <div class="paper-stack">
-                    <div class="paper firstsheet current-sheet">
-                        <div class="paper-content prologue-page">
+
+                <div id="second-page" class="paper-content-container kaisei-font">
+                    <div class="inner-block">
+                        <section class="prologue-section">
                             <h2 class="main-title">[Prolougue]</h2>
                             <div class="prologue-text">
                                 <!-- ...existing prologue text... -->
@@ -102,7 +102,7 @@
                                     そう思い、話を聞いてみることにした。</p>
                                 <h3 class="question-text">Q.人生の中での転機はありますか？</h3>
                             </div>
-                        </div>
+                        </section>
                     </div>
                 </div>
             </div>
@@ -129,50 +129,50 @@
 
 
         <section class="menu-board-section">
-            <div class="menu-full-container">
-                <img src="images/board-yoko1.png" alt="Menu Board" class="board-full-img">
+    <div class="menu-full-container">
+        <img src="images/board-yoko1.png" alt="Menu Board" class="board-full-img">
 
-                <div class="menu-content-overlay">
+        <div class="menu-content-overlay">
+            
+            <h2 class="menu-top-title">[Menu]</h2>
 
-                    <h2 class="menu-top-title">[Menu]</h2>
-
-                    <div class="menu-items-layer">
-                        <a href="chapter1.html" class="menu-item-link step-up">
-                            <div class="chapter-label-group">
-                                <p class="chapter-num">第1章</p>
-                                <p class="chapter-title">030に出会うまで</p>
-                            </div>
-                            <div class="menu-icon-wrapper">
-                                <img src="images/menu-1.png" alt="第1章" class="menu-drink-icon">
-                            </div>
-                            <p class="chapter-quote">「え？俺結婚する<br>つもりないよ」</p>
-                        </a>
-
-                        <a href="chapter2.html" class="menu-item-link step-mid">
-                            <div class="chapter-label-group">
-                                <p class="chapter-num">第2章</p>
-                                <p class="chapter-title">030との出会い</p>
-                            </div>
-                            <div class="menu-icon-wrapper">
-                                <img src="images/menu-2.png" alt="第2章" class="menu-drink-icon">
-                            </div>
-                            <p class="chapter-quote">「センスは努力で良くなれる<br>ものじゃないと思う」</p>
-                        </a>
-
-                        <a href="chapter3.html" class="menu-item-link step-up">
-                            <div class="chapter-label-group">
-                                <p class="chapter-num">第3章</p>
-                                <p class="chapter-title">過去とこれから</p>
-                            </div>
-                            <div class="menu-icon-wrapper">
-                                <img src="images/menu-3.png" alt="第3章" class="menu-drink-icon">
-                            </div>
-                            <p class="chapter-quote">「結局ね、<br>自分で選んでるの」</p>
-                        </a>
+            <div class="menu-items-layer">
+                <a href="chapter1.html" class="menu-item-link step-up">
+                    <div class="chapter-label-group">
+                        <p class="chapter-num">第1章</p>
+                        <p class="chapter-title">030に出会うまで</p>
                     </div>
-                </div>
+                    <div class="menu-icon-wrapper">
+                        <img src="images/menu-1.png" alt="第1章" class="menu-drink-icon">
+                    </div>
+                    <p class="chapter-quote">「え？俺結婚する<br>つもりないよ」</p>
+                </a>
+
+                <a href="chapter2.html" class="menu-item-link step-mid">
+                    <div class="chapter-label-group">
+                        <p class="chapter-num">第2章</p>
+                        <p class="chapter-title">030との出会い</p>
+                    </div>
+                    <div class="menu-icon-wrapper">
+                        <img src="images/menu-2.png" alt="第2章" class="menu-drink-icon">
+                    </div>
+                    <p class="chapter-quote">「センスは努力で良くなれる<br>ものじゃないと思う」</p>
+                </a>
+
+                <a href="chapter3.html" class="menu-item-link step-up">
+                    <div class="chapter-label-group">
+                        <p class="chapter-num">第3章</p>
+                        <p class="chapter-title">過去とこれから</p>
+                    </div>
+                    <div class="menu-icon-wrapper">
+                        <img src="images/menu-3.png" alt="第3章" class="menu-drink-icon">
+                    </div>
+                    <p class="chapter-quote">「結局ね、<br>自分で選んでるの」</p>
+                </a>
             </div>
-        </section>
+        </div>
+    </div>
+</section>
 
 
         <script src="functions.js"></script>

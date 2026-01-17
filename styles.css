@@ -78,16 +78,6 @@ body {
     margin-bottom: 50vh;
 }
 
-/* 画面に張り付くエリア */
-.clipboard-sticky-wrapper {
-    position: sticky;
-    top: 0;
-    width: 100%;
-    height: 100vh;
-    overflow: hidden;
-    /* 紙がめくれた時のはみ出し防止 */
-}
-
 /* 紙画像を常に画面中央に表示、高さを画面に合わせ幅は自動にする */
 .clipboard-sticky-wrapper {
     position: sticky;
@@ -112,28 +102,18 @@ body {
     /* 画像の上のテキスト操作を阻害しない */
 }
 
-/* paper-stack を画像より上に表示 */
-.clipboard-sticky-wrapper .paper-stack {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    z-index: 8;
-    /* 画像（1） / overlay（4）より上に */
-    pointer-events: auto;
-}
-
 /* テキストは紙の上に重なり、スクロールや選択を可能にする */
-.clipboard-sticky-wrapper .paper-content {
-    position: absolute;
+.clipboard-sticky-wrapper .inner-block {
+    position: relative;
     top: 51%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 3;
     width: calc(83vh * 0.7);
-    height: 83vh;
-    overflow-y: auto;
+    height: 80vh;
+    overflow: visible;
     /* 長い文をスクロール可能に */
-    padding: 6vh 2vw 3vh 2vw;
+    padding: 6vh 2vw 4vh 2vw;
     pointer-events: auto;
     /* テキストやリンクを操作可能に */
     background: transparent;
@@ -142,7 +122,7 @@ body {
 }
 
 /* 内部の段落余白は既存クラスで制御されるため重複しないように */
-.clipboard-sticky-wrapper .paper-content p {
+.clipboard-sticky-wrapper .inner-block p {
     margin-bottom: 1.2em
 }
 
@@ -151,7 +131,7 @@ body {
 
 
 /* プロフィールページ全体の基本色とフォント設定 */
-.profile-page {
+.inner-block {
     color: #2c4463;
     /* 少し青みがかった濃いグレー */
     line-height: 1.6;
@@ -291,6 +271,7 @@ body {
     /* 行間を広く取って読みやすく */
     margin-bottom: 1vh;
     margin-top: 2vh;
+    text-align: center;
 }
 
 .prologue-text p {
@@ -315,7 +296,7 @@ body {
 }
 
 /* オーバーレイが非表示になったら完全に操作不可にする */
-.paper-overlay[aria-hidden="true"] {
+.first-page[aria-hidden="true"] {
     pointer-events: none;
     visibility: hidden;
     opacity: 0 !important;
@@ -323,7 +304,7 @@ body {
 
 
 /* オーバーレイ（初期の profile/about） */
-.paper-overlay {
+.first-page {
     position: absolute;
     top: 0;
     left: 0;
@@ -340,7 +321,7 @@ body {
 }
 
 /* 表示時は完全に中央で浮かび上がる */
-.current-sheet.revealed .paper-content.prologue-page {
+.inner-block.revealed {
     opacity: 1;
     transform: translate(-50%, -50%) translateY(0);
     pointer-events: auto;
@@ -348,7 +329,7 @@ body {
 
 
 /* 以下は prologue を確実に前面に出し、overlay を完全に退かせる上書きルール */
-.paper-overlay[aria-hidden="true"] {
+.first-page[aria-hidden="true"] {
     display: none !important;
     pointer-events: none !important;
     visibility: hidden !important;
@@ -356,19 +337,18 @@ body {
 }
 
 /* overlay の通常表示時は紙より下に抑える（必要なら数値を調整） */
-.paper-overlay {
+.first-page {
     z-index: 40;
 }
 
-/* paper-stack を十分に前面に */
-.clipboard-sticky-wrapper .paper-stack {
+/* #second-page を前面に出す（HTML は id を使用） */
+.clipboard-sticky-wrapper #second-page {
     z-index: 200;
-    /* 画像やoverlayより上に確実に出す */
     pointer-events: auto;
 }
 
 /* Prologue（本文）を最前面にし、中央かつスクロール可能にする */
-.paper-content.prologue-page {
+.prologue-section {
     position: absolute;
     top: 53%;
     left: 50%;
@@ -387,8 +367,7 @@ body {
     box-sizing: border-box;
 }
 
-/* 表示時（paper-13 到達で付く .revealed） */
-.current-sheet.revealed .paper-content.prologue-page {
+.inner-block.revealed .prologue-section {
     opacity: 1;
     transform: translate(-50%, -50%) translateY(0);
     pointer-events: auto;
@@ -399,6 +378,36 @@ body {
     pointer-events: none;
 }
 
+/* --- styles.css の該当箇所を書き換え --- */
+
+/* 1枚目：最初は見える状態にするが、JSで変更できるように opacity: 1 は消すか、JSに従うようにする */
+#first-page {
+    z-index: 11;
+    /* opacity: 1; ← これを削除。指定しないことでJSが操作しやすくなります */
+}
+
+/* 2枚目：最初は絶対に見えないようにしておく */
+#second-page {
+    z-index: 12;
+    opacity: 0;
+    visibility: hidden;
+    /* 完全に隠す */
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+    /* ふわっと出すためのアニメーション設定 */
+}
+
+/* JSで操作する共通コンテナの基本設定 */
+.paper-content-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    /* transition: opacity 0.3s ease; をここに入れてもOK */
+}
 
 
 
@@ -725,4 +734,56 @@ body {
     opacity: 0;
     animation: simpleFadeIn 1.0s ease-out 1.8s forwards;
     z-index: 10;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.chapter-1 .clipboard-container.clipboard-container {
+    position: relative;
+    width: 100vw;
+    height: 500vh;
+    /* スクロール遊び分 */
+    margin-top: 100vh;
+    margin-bottom: 50vh;
+}
+
+.interview-section {
+    position: relative;
+    width: 90%;
+    height: 100%;
+    text-align: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow-y: auto;
+}
+
+.question {
+    text-align: center;
+    font-size: 3.0vh;
+    letter-spacing: 0.05em;
+    margin: 0;
+}
+
+.answer-text {
+    margin-top: 2.0vh;
+}
+
+.answer p {
+    font-size: 1.9vh;
+    line-height: 3.0vh;
+    font-weight: bold;
+}
+
+.interview-section .inner-block {
+    overflow-y: hidden !important; /* 標準のスクロールバーを消し、JSに任せる */
 }

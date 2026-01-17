@@ -1,153 +1,171 @@
-// ...existing code...
-
-// 画像のプリロード（読み込み待ちによるチカチカを防止）
-const totalFrames = 10;
-for (let i = 1; i <= totalFrames; i++) {
-    const img = new Image();
-    img.src = `images/top-${i}.png`;
+(function () {
+    // --- 1. 画像のプリロード（共通） ---
+    const totalPaperFrames = 13;
+    for (let i = 1; i <= totalPaperFrames; i++) {
+        const img = new Image();
+        img.src = `images/paper-${i}.png`;
+    }
 }
+)();
+    // ...existing code...
 
+/* ---------- interview-section 内のスクロールを内側にフォワードする ----------
+   変更点：container の progress（outer scroll）を基準に転送を行う。
+   これで「スクロール領域（container）の間だけ固定挙動」が期待どおりになります。
+*/
+(function attachInnerScrollForwarding() {
+    const selector = '.interview-section .clipboard-sticky-wrapper';
+    function getNodes() {
+        // container を基準に progress を計算するため container も取得
+        const wrapper = document.querySelector(selector);
+        const container = wrapper ? wrapper.closest('.clipboard-container') : null;
+        const inner = wrapper ? wrapper.querySelector('.inner-block') : null;
+        return { wrapper, container, inner };
+    }
+
+    function containerInStickyRange(container) {
+        if (!container) return false;
+        const r = container.getBoundingClientRect();
+        const scrolled = Math.max(0, -r.top);
+        const maxScroll = Math.max(1, r.height - window.innerHeight);
+        const progress = Math.min(1, scrolled / maxScroll);
+        // 「領域に入り始めたら固定開始、領域を抜けたら解除」
+        return progress > 0 && progress < 1;
+    }
+
+    // Wheel (desktop)： passive:false 必須（preventDefault を使うため）
+    window.addEventListener('wheel', (ev) => {
+        const { wrapper, container, inner } = getNodes();
+        if (!wrapper || !container || !inner) return;
+        if (!containerInStickyRange(container)) return;
+
+        const delta = ev.deltaY;
+        const atTop = inner.scrollTop <= 0 && delta < 0;
+        const atBottom = inner.scrollTop + inner.clientHeight >= inner.scrollHeight - 1 && delta > 0;
+
+        if (!atTop && !atBottom) {
+            inner.scrollTop += delta;
+            ev.preventDefault();
+        }
+        // 端だったらページスクロールに委譲（prevent しない）
+    }, { passive: false });
+
+    // Touch (mobile)
+    let lastTouchY = null;
+    window.addEventListener('touchstart', (ev) => {
+        const { wrapper, container } = getNodes();
+        if (!wrapper || !container || !containerInStickyRange(container)) { lastTouchY = null; return; }
+        lastTouchY = ev.touches && ev.touches[0] ? ev.touches[0].clientY : null;
+    }, { passive: true });
+
+    window.addEventListener('touchmove', (ev) => {
+        const { wrapper, container, inner } = getNodes();
+        if (!wrapper || !container || !inner || lastTouchY === null) return;
+        if (!containerInStickyRange(container)) { lastTouchY = null; return; }
+
+        const touchY = ev.touches && ev.touches[0] ? ev.touches[0].clientY : null;
+        if (touchY === null) return;
+
+        const delta = lastTouchY - touchY;
+        const atTop = inner.scrollTop <= 0 && delta < 0;
+        const atBottom = inner.scrollTop + inner.clientHeight >= inner.scrollHeight - 1 && delta > 0;
+
+        if (!atTop && !atBottom) {
+            inner.scrollTop += delta;
+            ev.preventDefault();
+        } else {
+            lastTouchY = touchY;
+        }
+        lastTouchY = touchY;
+    }, { passive: false });
+
+    console.log('attachInnerScrollForwarding: listeners attached (selector=', selector, ')');
+})();
+    
+
+// --- 2. スクロールイベント ---
 window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+
+    // 【A】トップページ専用の処理（index.html用）
     const topSection = document.querySelector('.top-page-section');
     const topImage = document.getElementById('top-image');
     const topTitle = document.querySelector('.top-title');
 
-    const scrollY = window.scrollY;
-    const sectionTop = topSection.offsetTop;
-    const sectionHeight = topSection.offsetHeight - window.innerHeight;
+    if (topSection && topImage) {
+        const sectionTop = topSection.offsetTop;
+        const sectionHeight = topSection.offsetHeight - window.innerHeight;
+        let progress = (scrollY - sectionTop) / sectionHeight;
+        progress = Math.max(0, Math.min(1, progress * 2));
 
-    let progress = (scrollY - sectionTop) / sectionHeight;
-    progress = Math.max(0, Math.min(1, progress * 2));
+        const frameIndex = Math.min(10, Math.floor(progress * 10) + 1);
+        topImage.src = `images/top-${frameIndex}.png`;
 
-    // --- 画像の切り替え ---
-    const totalFrames = 10;
-    const frameIndex = Math.min(
-        Math.floor(progress * totalFrames) + 1,
-        totalFrames
-    );
-    topImage.src = `images/top-${frameIndex}.png`;
-
-    const textOpacity = Math.min(1, progress * 2);
-    topTitle.style.opacity = textOpacity;
-
-    // 位置もじわじわ上に上げる（10pxから0pxへ）
-    const translateY = 10 - (textOpacity * 10);
-    topTitle.style.transform = `translateY(${translateY}px)`;
-});
-
-// ...existing code...
-
-// --- clipboard セクション用のスクロール処理（オーバーレイ→フレーム→めくり→Prologue 表示） ---
-(function () {
-    const container = document.querySelector('.clipboard-container');
-    const paperImg = document.getElementById('paper-image');
-    const currentSheet = document.querySelector('.current-sheet');
-    const topTitle = document.querySelector('.top-title');
-    const overlay = document.getElementById('paper-overlay');
-
-    if (!container || !paperImg || !currentSheet || !overlay) return;
-
-    const frameCount = 13; // images/paper-1.png ... paper-13.png
-    for (let i = 1; i <= frameCount; i++) {
-        const img = new Image();
-        img.src = `images/paper-${i}.png`;
+        if (topTitle) {
+            topTitle.style.opacity = Math.min(1, progress * 2);
+        }
     }
 
-    const fadeStart = 0.4;
-    const fadeEnd = 0.3;   // 0..fadeEnd: overlay フェードアウト領域（短めにして素早く消す）
-    const animStart = fadeEnd;
-    const animEnd = 0.5;    // animStart..animEnd: フレーム切替領域（やや圧縮）
+    // 【B】クリップボードめくり処理 (ここを新HTMLに合わせて修正)
+    const container = document.querySelector('.interview-section .clipboard-container') || document.querySelector('.clipboard-container');
+    const paperImg = document.getElementById('paper-image');
+    const firstPage = document.getElementById('first-page') || document.querySelector('.first-page') || null;
+    const secondPage = document.getElementById('second-page') || document.querySelector('.second-page') || null;
 
-    let flipped = false;
-
-    // functions.js の onScroll 関数内を差し替え
-    function onScroll() {
+    if (container && paperImg) {
         const rect = container.getBoundingClientRect();
+        
+    
         const scrolled = Math.max(0, -rect.top);
         const maxScroll = Math.max(1, rect.height - window.innerHeight);
         let progress = Math.min(1, scrolled / maxScroll);
 
-        // 1. overlay (プロフィール) のフェード処理
-        if (progress <= fadeEnd) {
-            const t = progress / fadeEnd;
-            overlay.style.opacity = String(1 - t);
-            overlay.style.visibility = 'visible';
-            overlay.style.pointerEvents = 'auto';
-        } else {
-            overlay.style.opacity = '0';
-            overlay.style.visibility = 'hidden'; // display: none は使わず visibility で制御
-            overlay.style.pointerEvents = 'none';
+        const fadeEnd = 0.35;   // 1枚目が消え終わるタイミング
+        const animStart = 0.35; // めくりが始まるタイミング
+        const animEnd = 0.7;   // めくりが終わるタイミング
+        const showStart = 0.65; // 2枚目が出始めるタイミング
+
+        // 1枚目（first-page）のフェード処理
+        if (firstPage) {
+            if (progress <= fadeEnd) {
+                firstPage.style.opacity = String(1 - (progress / fadeEnd));
+                firstPage.style.visibility = 'visible';
+            } else {
+                firstPage.style.opacity = '0';
+                firstPage.style.visibility = 'hidden';
+            }
         }
 
-        // 2. フレームアニメーション (paper-1 〜 paper-13)
+        // フレームアニメーション (paper-1 〜 paper-13)
         const norm = Math.max(0, Math.min(1, (progress - animStart) / (animEnd - animStart)));
-        const frameIndex = Math.min(frameCount, Math.max(1, Math.floor(norm * (frameCount - 1)) + 1));
+        const frameIndex = Math.min(13, Math.max(1, Math.floor(norm * 12) + 1));
         paperImg.src = `images/paper-${frameIndex}.png`;
 
-        // 3. プロローグ表示の判定
-        // paper-13 に到達したかどうかを重視する
-        if (frameIndex === frameCount && progress > 0.7) {
-            if (!flipped) {
-                currentSheet.classList.add('revealed');
-                flipped = true;
-            }
-        } else {
-            if (flipped) {
-                currentSheet.classList.remove('revealed');
-                flipped = false;
+        // 2枚目（second-page）の表示判定
+        if (secondPage) {
+            const innerBlock = secondPage.querySelector('.inner-block');
+            if (progress >= showStart) {
+                secondPage.style.opacity = '1';
+                secondPage.style.visibility = 'visible';
+                secondPage.style.pointerEvents = 'auto';
+                if (innerBlock) innerBlock.classList.add('revealed'); // Prologue 表示用
+            } else {
+                secondPage.style.opacity = '0';
+                secondPage.style.visibility = 'hidden';
+                secondPage.style.pointerEvents = 'none';
+                if (innerBlock) innerBlock.classList.remove('revealed');
             }
         }
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-})();
-
-
-
-
-/// すでに記述がある場合は、このロジックに差し替えてください
-window.addEventListener('scroll', () => {
+    // 【C】その他の要素 (Turning Pointなど)
     const triggerSection = document.getElementById('turning-point-trigger');
     const fullTreeImg = document.getElementById('turning-tree-full');
-
-    if (!triggerSection || !fullTreeImg) return;
-
-    const scrollY = window.scrollY;
-    const sectionTop = triggerSection.offsetTop;
-    const sectionHeight = triggerSection.offsetHeight - window.innerHeight;
-
-    // セクションに入っている間だけ計算
-    let progress = (scrollY - sectionTop) / sectionHeight;
-    progress = Math.max(0, Math.min(1, progress * 1.5));
-
-    // tree-1 〜 tree-7
-    const totalTreeFrames = 7;
-    // progressが1のときにちょうど7枚目になるように計算
-    const treeIndex = Math.min(
-        totalTreeFrames,
-        Math.floor(progress * (totalTreeFrames - 0.01)) + 1
-    );
-
-    const nextSrc = `images/tree-${treeIndex}.png`;
-    if (fullTreeImg.getAttribute('src') !== nextSrc) {
-        fullTreeImg.src = nextSrc;
+    if (triggerSection && fullTreeImg) {
+        const sectionTop = triggerSection.offsetTop;
+        const sectionHeight = triggerSection.offsetHeight - window.innerHeight;
+        let treeProgress = Math.max(0, Math.min(1, (scrollY - sectionTop) / sectionHeight));
+        const treeIndex = Math.min(7, Math.floor(treeProgress * 7) + 1);
+        fullTreeImg.src = `images/tree-${treeIndex}.png`;
     }
-});
-
-
-
-
-
-function scrollToSection(selector) {
-    const target = document.querySelector(selector);
-    if (target) {
-        // ヘッダーなどがある場合に備え、少し上（100pxなど）に余裕を持って止める
-        const offset = 100;
-        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
-
-        window.scrollTo({
-            top: targetPosition,
-            behavior: 'smooth'
-        });
-    }
-}
+}, { passive: true });
