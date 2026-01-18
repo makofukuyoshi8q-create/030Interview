@@ -77,6 +77,37 @@ body {
     margin-bottom: 0;
 }
 
+.content-area>.clipboard-container {
+    background-image: url('images/030.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    margin-top: 0vh;
+    padding-top: 100vh;
+    padding-bottom: 100vh;
+}
+
+.content-area>.clipboard-container::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.45);
+    /* 調整可 */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 300ms ease, visibility 0ms linear 300ms;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* クリップボードが表示されたらうっすら白フィルターを乗せる */
+.content-area>.clipboard-container.has-overlay::before {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 300ms ease;
+}
+
 /* 紙画像を常に画面中央に表示、高さを画面に合わせ幅は自動にする */
 .clipboard-sticky-wrapper {
     position: sticky;
@@ -314,7 +345,7 @@ body {
     align-items: center;
     z-index: 4;
     pointer-events: auto;
-    transition: opacity 0.25s ease-out;
+    transition: opacity 1.0s ease-out;
     /* ここも短くしてより素早くフェード */
     will-change: opacity;
 }
@@ -737,7 +768,7 @@ body {
     right: 10%;
     bottom: 5%;
     font-family: 'Kaisei Opti', serif;
-    font-size: 6vh;
+    font-size: 5vh;
     font-weight: bold;
     color: #2c4463;
     opacity: 0;
@@ -968,3 +999,11 @@ body {
     color: #2c4463;
     margin-bottom: 3vh;
 }
+
+
+
+
+
+
+
+

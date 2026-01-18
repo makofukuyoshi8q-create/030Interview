@@ -106,6 +106,32 @@ window.addEventListener('scroll', () => {
         }
     }
 
+    /* ...existing code... */
+    (function manageClipboardOverlay() {
+        // content-area の clipboard を対象（index/chapter 両方で動くように）
+        const containers = document.querySelectorAll('.content-area > .clipboard-container, .clipboard-container');
+        if (!containers || containers.length === 0) return;
+
+        containers.forEach(container => {
+            const wrapper = container.querySelector('.clipboard-sticky-wrapper');
+            if (!wrapper) return;
+
+            // wrapper が画面の半分以上見えたらオーバーレイを付ける（閾値は調整可）
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.intersectionRatio > 0.5) {
+                        container.classList.add('has-overlay');
+                    } else {
+                        container.classList.remove('has-overlay');
+                    }
+                });
+            }, { threshold: [0, 0.5] });
+
+            observer.observe(wrapper);
+        });
+    })();
+    /* ...existing code... */
+
     // 【B】クリップボードめくり処理（chapter1では3枚めくり対応、indexでは従来通り）
     const container = document.querySelector('.interview-section .clipboard-container') || document.querySelector('.clipboard-container');
     const paperImg = document.getElementById('paper-image');
@@ -113,6 +139,7 @@ window.addEventListener('scroll', () => {
     const secondPage = document.getElementById('second-page') || document.querySelector('.second-page') || null;
     const thirdPage = document.getElementById('third-page') || null;
 
+    /* ...existing code... */
     if (container && paperImg) {
         const rect = container.getBoundingClientRect();
         const scrolled = Math.max(0, -rect.top);
@@ -120,11 +147,17 @@ window.addEventListener('scroll', () => {
         let progress = Math.min(1, scrolled / maxScroll);
 
         const totalFrames = 13; // paper-1 ... paper-13
-        const fadeEnd = 0.25;
+
+        // フェード開始を遅らせたい場合は fadeStart を大きくする（例: 0.4）
+        const fadeStart = 0.25;
+        const fadeEnd = 0.35;
+
+        // overlay が未定義になる可能性があるので安全に取得
+        const overlay = firstPage || (container ? container.querySelector('.first-page') : null);
 
         if (thirdPage) {
             // chapter1: 2段階めくり
-            const animStart1 = 0.20;
+            const animStart1 = 0.25;
             const animEnd1 = 0.38;
             const showSecond = 0.38;
 
@@ -134,14 +167,33 @@ window.addEventListener('scroll', () => {
 
             const pageFade = 0.12;
 
-            // first-page のフェードアウト
+            // first-page のフェードアウト（fadeStart -> fadeEnd を使用）
             if (firstPage) {
-                if (progress <= fadeEnd) {
-                    firstPage.style.opacity = String(1 - (progress / fadeEnd));
+                if (progress <= fadeStart) {
+                    firstPage.style.opacity = '1';
+                    firstPage.style.visibility = 'visible';
+                } else if (progress > fadeStart && progress <= fadeEnd) {
+                    const local = (progress - fadeStart) / (fadeEnd - fadeStart);
+                    firstPage.style.opacity = String(Math.max(0, 1 - local));
                     firstPage.style.visibility = 'visible';
                 } else {
                     firstPage.style.opacity = '0';
                     firstPage.style.visibility = 'hidden';
+                }
+            }
+
+            // overlay（同一扱い）も安全に制御
+            if (overlay) {
+                if (progress <= fadeStart) {
+                    overlay.style.opacity = '1';
+                    overlay.style.visibility = 'visible';
+                } else if (progress > fadeStart && progress <= fadeEnd) {
+                    const fadeProgress = (progress - fadeStart) / (fadeEnd - fadeStart);
+                    overlay.style.opacity = String(Math.max(0, 1 - fadeProgress));
+                    overlay.style.visibility = 'visible';
+                } else {
+                    overlay.style.opacity = '0';
+                    overlay.style.visibility = 'hidden';
                 }
             }
 
@@ -185,27 +237,34 @@ window.addEventListener('scroll', () => {
             }
 
             // 3枚目表示判定
-            const inner3 = thirdPage.querySelector('.inner-block');
-            if (progress >= showThird) {
-                thirdPage.style.opacity = '1';
-                thirdPage.style.visibility = 'visible';
-                thirdPage.style.pointerEvents = 'auto';
-                if (inner3) inner3.classList.add('revealed');
-            } else {
-                thirdPage.style.opacity = '0';
-                thirdPage.style.visibility = 'hidden';
-                thirdPage.style.pointerEvents = 'none';
-                if (inner3) inner3.classList.remove('revealed');
+            if (thirdPage) {
+                const inner3 = thirdPage.querySelector('.inner-block');
+                if (progress >= showThird) {
+                    thirdPage.style.opacity = '1';
+                    thirdPage.style.visibility = 'visible';
+                    thirdPage.style.pointerEvents = 'auto';
+                    if (inner3) inner3.classList.add('revealed');
+                } else {
+                    thirdPage.style.opacity = '0';
+                    thirdPage.style.visibility = 'hidden';
+                    thirdPage.style.pointerEvents = 'none';
+                    if (inner3) inner3.classList.remove('revealed');
+                }
             }
 
         } else {
             // index 等：thirdPage がない場合（従来通りの1回めくり）
-            const animStart = 0.15;
+            const animStart = 0.25;
             const animEnd = 0.45;
 
+            // first-page のフェードアウト（fadeStart -> fadeEnd を使用）
             if (firstPage) {
-                if (progress <= fadeEnd) {
-                    firstPage.style.opacity = String(1 - (progress / fadeEnd));
+                if (progress <= fadeStart) {
+                    firstPage.style.opacity = '1';
+                    firstPage.style.visibility = 'visible';
+                } else if (progress > fadeStart && progress <= fadeEnd) {
+                    const local = (progress - fadeStart) / (fadeEnd - fadeStart);
+                    firstPage.style.opacity = String(Math.max(0, 1 - local));
                     firstPage.style.visibility = 'visible';
                 } else {
                     firstPage.style.opacity = '0';
@@ -213,6 +272,7 @@ window.addEventListener('scroll', () => {
                 }
             }
 
+            // 紙フレーム
             if (progress >= animStart && progress <= animEnd) {
                 const norm = (progress - animStart) / (animEnd - animStart);
                 const idx = Math.min(totalFrames, Math.max(1, Math.floor(norm * (totalFrames - 1)) + 1));
@@ -239,6 +299,7 @@ window.addEventListener('scroll', () => {
             }
         }
     }
+    /* ...existing code... */
 
     // 【C】その他の要素 (Turning Pointなど)
     const triggerSection = document.getElementById('turning-point-trigger');
