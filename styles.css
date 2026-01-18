@@ -1,4 +1,3 @@
-/* 全体の基本設定 */
 body {
     margin: 0;
     padding: 0;
@@ -74,8 +73,8 @@ body {
     width: 100vw;
     height: 300vh;
     /* スクロール遊び分 */
-    margin-top: 100vh;
-    margin-bottom: 50vh;
+    margin-top: 30vh;
+    margin-bottom: 0;
 }
 
 /* 紙画像を常に画面中央に表示、高さを画面に合わせ幅は自動にする */
@@ -496,7 +495,7 @@ body {
 .menu-board-section {
     width: 100vw;
     height: 100vh;
-    margin-top: 50vh;
+    margin-top: 30vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -757,13 +756,14 @@ body {
 
 
 
-.chapter-1,.chapter-2,.chapter-3 .clipboard-container.clipboard-container {
+.chapter-1 .clipboard-container,
+.chapter-2 .clipboard-container,
+.chapter-3 .clipboard-container {
     position: relative;
     width: 100vw;
     height: 500vh;
     /* スクロール遊び分 */
-    margin:0%;
-
+    margin: 0;
 }
 
 .interview-section {
@@ -795,7 +795,8 @@ body {
     top: 0.3vh;
     bottom: 0.3vh;
     width: 1vh;
-    background:#2c4463; /* 好きな色に変更可 */
+    background: #2c4463;
+    /* 好きな色に変更可 */
     border-radius: 2px;
 }
 
@@ -805,9 +806,11 @@ body {
     position: absolute;
     left: 0;
     right: 1vh;
-    bottom: -1vh;       /* ラインと次の要素の距離 */
+    bottom: -1vh;
+    /* ラインと次の要素の距離 */
     height: 1px;
-    background:#2c4463; /* 薄いライン */
+    background: #2c4463;
+    /* 薄いライン */
     opacity: 0.3;
 }
 
@@ -817,17 +820,18 @@ body {
     line-height: 3.0vh;
 }
 
-.response{
+.response {
     font-size: 1.7vh;
     margin: 3vh 0;
     color: #777;
 }
 
 .interview-section .inner-block {
-    overflow-y: hidden !important; /* 標準のスクロールバーを消し、JSに任せる */
+    overflow-y: hidden !important;
+    /* 標準のスクロールバーを消し、JSに任せる */
 }
 
-.page-number{
+.page-number {
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
@@ -840,22 +844,27 @@ body {
 /* メニューに戻るボタン（共通設定） */
 .back-menu {
     position: fixed;
-    bottom: 5vh;      /* 下からの距離 */
-    left: 5vw;        /* 左からの距離 */
+    bottom: 5vh;
+    /* 下からの距離 */
+    left: 5vw;
+    /* 左からの距離 */
     display: flex;
     flex-direction: column;
     align-items: center;
     text-decoration: none;
-    z-index: 1000;      /* 最前面に表示 */
+    z-index: 1000;
+    /* 最前面に表示 */
     transition: transform 0.3s ease;
 }
 
 /* 卓上ベルの画像 */
 .back-menu img {
-    width: 15vw;       /* ベルのサイズ（適宜調整してください） */
+    width: 15vw;
+    /* ベルのサイズ（適宜調整してください） */
     height: auto;
     margin-bottom: 5px;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); /* 軽く影をつけて見やすく */
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+    /* 軽く影をつけて見やすく */
     transition: filter 0.3s ease;
 }
 
@@ -864,21 +873,24 @@ body {
     font-family: 'Kaisei Opti', serif;
     font-size: 2vh;
     font-weight: bold;
-    color: #2c4463;     /* 他のテキストと合わせた色 */
+    color: #2c4463;
+    /* 他のテキストと合わせた色 */
     letter-spacing: 0.05em;
-    background-color: rgba(255, 255, 255, 0.7); /* 文字の背景を少し明るくして可読性アップ */
+    background-color: rgba(255, 255, 255, 0.7);
+    /* 文字の背景を少し明るくして可読性アップ */
     padding: 2px 8px;
     border-radius: 4px;
-    
+
 }
 
 /* ホバー時の演出（チリンと鳴るようなイメージ） */
 .back-menu:hover {
-    transform: scale(1.1); /* 少し大きく */
+    transform: scale(1.1);
+    /* 少し大きく */
 }
 
 .back-menu:hover img {
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)) brightness(1.1);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3)) brightness(1.1);
 }
 
 
@@ -912,7 +924,8 @@ body {
     text-decoration: none;
     font-size: 1.8vh;
     font-weight: bold;
-    border-radius: 50px; /* 丸みのあるデザイン */
+    border-radius: 50px;
+    /* 丸みのあるデザイン */
     transition: all 0.3s ease;
     box-shadow: 0 4px 15px rgba(44, 68, 99, 0.2);
 }
@@ -930,17 +943,21 @@ body {
 }
 
 .next-chapter-btn:hover .arrow {
-    transform: translateX(5px); /* ホバーで矢印が動く */
+    transform: translateX(5px);
+    /* ホバーで矢印が動く */
 }
 
 /* GIFのサイズ調整 */
 .summary-gif {
+    position: absolute;
     width: 100%;
-    margin-bottom: 1vh; /* summaryとの間の余白 */
+    margin-bottom: 20vh;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
 }
 
 .summary-gif img {
-    width: 100%; /* 紙の幅に対してのサイズ（お好みで調整してください） */
+    width: 100%;
+    /* 紙の幅に対してのサイズ（お好みで調整してください） */
     height: auto;
     object-fit: contain;
 }
