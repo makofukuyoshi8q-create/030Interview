@@ -757,13 +757,13 @@ body {
 
 
 
-.chapter-1 .clipboard-container.clipboard-container {
+.chapter-1,.chapter-2,.chapter-3 .clipboard-container.clipboard-container {
     position: relative;
     width: 100vw;
     height: 500vh;
     /* スクロール遊び分 */
-    margin-top: 100vh;
-    margin-bottom: 50vh;
+    margin:0%;
+
 }
 
 .interview-section {
