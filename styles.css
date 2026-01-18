@@ -393,8 +393,16 @@ body {
     visibility: hidden;
     /* 完全に隠す */
     pointer-events: none;
-    transition: opacity 0.4s ease;
+    transition: opacity 0.4s ease, visibility 0.4s;
     /* ふわっと出すためのアニメーション設定 */
+}
+
+#third-page {
+    z-index: 12;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.4s ease, visibility 0.4s;
 }
 
 /* JSで操作する共通コンテナの基本設定 */
@@ -407,7 +415,9 @@ body {
     transform: translate(-50%, -50%);
     z-index: 10;
     /* transition: opacity 0.3s ease; をここに入れてもOK */
+    transition: opacity 0.4s ease;
 }
+
 
 
 
@@ -810,6 +820,7 @@ body {
 .response{
     font-size: 1.7vh;
     margin: 3vh 0;
+    color: #777;
 }
 
 .interview-section .inner-block {
@@ -822,3 +833,4 @@ body {
     transform: translateX(-50%);
     bottom: 0.5vh;
 }
+

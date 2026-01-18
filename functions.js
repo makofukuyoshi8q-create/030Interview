@@ -7,7 +7,7 @@
     }
 }
 )();
-    // ...existing code...
+// ...existing code...
 
 /* ---------- interview-section 内のスクロールを内側にフォワードする ----------
    変更点：container の progress（outer scroll）を基準に転送を行う。
@@ -81,7 +81,7 @@
 
     console.log('attachInnerScrollForwarding: listeners attached (selector=', selector, ')');
 })();
-    
+
 
 // --- 2. スクロールイベント ---
 window.addEventListener('scroll', () => {
@@ -106,54 +106,136 @@ window.addEventListener('scroll', () => {
         }
     }
 
-    // 【B】クリップボードめくり処理 (ここを新HTMLに合わせて修正)
+    // 【B】クリップボードめくり処理（chapter1では3枚めくり対応、indexでは従来通り）
     const container = document.querySelector('.interview-section .clipboard-container') || document.querySelector('.clipboard-container');
     const paperImg = document.getElementById('paper-image');
     const firstPage = document.getElementById('first-page') || document.querySelector('.first-page') || null;
     const secondPage = document.getElementById('second-page') || document.querySelector('.second-page') || null;
+    const thirdPage = document.getElementById('third-page') || null;
 
     if (container && paperImg) {
         const rect = container.getBoundingClientRect();
-        
-    
         const scrolled = Math.max(0, -rect.top);
         const maxScroll = Math.max(1, rect.height - window.innerHeight);
         let progress = Math.min(1, scrolled / maxScroll);
 
-        const fadeEnd = 0.35;   // 1枚目が消え終わるタイミング
-        const animStart = 0.35; // めくりが始まるタイミング
-        const animEnd = 0.7;   // めくりが終わるタイミング
-        const showStart = 0.65; // 2枚目が出始めるタイミング
+        const totalFrames = 13; // paper-1 ... paper-13
+        const fadeEnd = 0.25;
 
-        // 1枚目（first-page）のフェード処理
-        if (firstPage) {
-            if (progress <= fadeEnd) {
-                firstPage.style.opacity = String(1 - (progress / fadeEnd));
-                firstPage.style.visibility = 'visible';
-            } else {
-                firstPage.style.opacity = '0';
-                firstPage.style.visibility = 'hidden';
+        if (thirdPage) {
+            // chapter1: 2段階めくり
+            const animStart1 = 0.20;
+            const animEnd1 = 0.38;
+            const showSecond = 0.38;
+
+            const animStart2 = 0.50;
+            const animEnd2 = 0.78;
+            const showThird = 0.78;
+
+            const pageFade = 0.12;
+
+            // first-page のフェードアウト
+            if (firstPage) {
+                if (progress <= fadeEnd) {
+                    firstPage.style.opacity = String(1 - (progress / fadeEnd));
+                    firstPage.style.visibility = 'visible';
+                } else {
+                    firstPage.style.opacity = '0';
+                    firstPage.style.visibility = 'hidden';
+                }
             }
-        }
 
-        // フレームアニメーション (paper-1 〜 paper-13)
-        const norm = Math.max(0, Math.min(1, (progress - animStart) / (animEnd - animStart)));
-        const frameIndex = Math.min(13, Math.max(1, Math.floor(norm * 12) + 1));
-        paperImg.src = `images/paper-${frameIndex}.png`;
-
-        // 2枚目（second-page）の表示判定
-        if (secondPage) {
-            const innerBlock = secondPage.querySelector('.inner-block');
-            if (progress >= showStart) {
-                secondPage.style.opacity = '1';
-                secondPage.style.visibility = 'visible';
-                secondPage.style.pointerEvents = 'auto';
-                if (innerBlock) innerBlock.classList.add('revealed'); // Prologue 表示用
+            // 紙のフレーム制御（1回目／間隔／2回目）
+            if (progress >= animStart1 && progress <= animEnd1) {
+                const norm = (progress - animStart1) / (animEnd1 - animStart1);
+                const idx = Math.min(totalFrames, Math.max(1, Math.floor(norm * (totalFrames - 1)) + 1));
+                paperImg.src = `images/paper-${idx}.png`;
+            } else if (progress > animEnd1 && progress < animStart2) {
+                paperImg.src = `images/paper-1.png`;
+            } else if (progress >= animStart2 && progress <= animEnd2) {
+                const norm2 = (progress - animStart2) / (animEnd2 - animStart2);
+                const idx2 = Math.min(totalFrames, Math.max(1, Math.floor(norm2 * (totalFrames - 1)) + 1));
+                paperImg.src = `images/paper-${idx2}.png`;
+            } else if (progress < animStart1) {
+                paperImg.src = `images/paper-1.png`;
             } else {
-                secondPage.style.opacity = '0';
-                secondPage.style.visibility = 'hidden';
-                secondPage.style.pointerEvents = 'none';
-                if (innerBlock) innerBlock.classList.remove('revealed');
+                paperImg.src = `images/paper-13.png`;
+            }
+
+            // 2枚目表示・フェード制御（2→3 の時にフェードアウト）
+            if (secondPage) {
+                const inner = secondPage.querySelector('.inner-block');
+                if (progress >= showSecond && progress < animStart2) {
+                    secondPage.style.opacity = '1';
+                    secondPage.style.visibility = 'visible';
+                    secondPage.style.pointerEvents = 'auto';
+                    if (inner) inner.classList.add('revealed');
+                } else if (progress >= animStart2 && progress <= (animStart2 + pageFade)) {
+                    const local = (progress - animStart2) / pageFade;
+                    secondPage.style.opacity = String(Math.max(0, 1 - local));
+                    secondPage.style.visibility = 'visible';
+                    secondPage.style.pointerEvents = 'none';
+                    if (inner) inner.classList.remove('revealed');
+                } else {
+                    secondPage.style.opacity = '0';
+                    secondPage.style.visibility = 'hidden';
+                    secondPage.style.pointerEvents = 'none';
+                    if (inner) inner.classList.remove('revealed');
+                }
+            }
+
+            // 3枚目表示判定
+            const inner3 = thirdPage.querySelector('.inner-block');
+            if (progress >= showThird) {
+                thirdPage.style.opacity = '1';
+                thirdPage.style.visibility = 'visible';
+                thirdPage.style.pointerEvents = 'auto';
+                if (inner3) inner3.classList.add('revealed');
+            } else {
+                thirdPage.style.opacity = '0';
+                thirdPage.style.visibility = 'hidden';
+                thirdPage.style.pointerEvents = 'none';
+                if (inner3) inner3.classList.remove('revealed');
+            }
+
+        } else {
+            // index 等：thirdPage がない場合（従来通りの1回めくり）
+            const animStart = 0.15;
+            const animEnd = 0.45;
+
+            if (firstPage) {
+                if (progress <= fadeEnd) {
+                    firstPage.style.opacity = String(1 - (progress / fadeEnd));
+                    firstPage.style.visibility = 'visible';
+                } else {
+                    firstPage.style.opacity = '0';
+                    firstPage.style.visibility = 'hidden';
+                }
+            }
+
+            if (progress >= animStart && progress <= animEnd) {
+                const norm = (progress - animStart) / (animEnd - animStart);
+                const idx = Math.min(totalFrames, Math.max(1, Math.floor(norm * (totalFrames - 1)) + 1));
+                paperImg.src = `images/paper-${idx}.png`;
+            } else if (progress < animStart) {
+                paperImg.src = `images/paper-1.png`;
+            } else {
+                paperImg.src = `images/paper-13.png`;
+            }
+
+            if (secondPage) {
+                const inner = secondPage.querySelector('.inner-block');
+                if (progress >= animEnd) {
+                    secondPage.style.opacity = '1';
+                    secondPage.style.visibility = 'visible';
+                    secondPage.style.pointerEvents = 'auto';
+                    if (inner) inner.classList.add('revealed');
+                } else {
+                    secondPage.style.opacity = '0';
+                    secondPage.style.visibility = 'hidden';
+                    secondPage.style.pointerEvents = 'none';
+                    if (inner) inner.classList.remove('revealed');
+                }
             }
         }
     }
