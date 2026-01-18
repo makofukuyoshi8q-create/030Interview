@@ -880,3 +880,74 @@ body {
 .back-menu:hover img {
     filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)) brightness(1.1);
 }
+
+
+
+
+
+/* サマリーとボタンのレイアウト */
+.summary-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+    height: 100%;
+    text-align: center;
+    padding: 0 10%;
+}
+
+.summary {
+    font-size: 2vh;
+    line-height: 1.8;
+    color: #2c4463;
+    margin-bottom: 4vh;
+}
+
+/* 次の章へのボタン */
+.next-chapter-btn {
+    display: inline-block;
+    padding: 1.5vh 3vh;
+    background-color: #2c4463;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.8vh;
+    font-weight: bold;
+    border-radius: 50px; /* 丸みのあるデザイン */
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(44, 68, 99, 0.2);
+}
+
+.next-chapter-btn:hover {
+    background-color: #3e5d85;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(44, 68, 99, 0.3);
+}
+
+.next-chapter-btn .arrow {
+    margin-left: 10px;
+    display: inline-block;
+    transition: transform 0.3s ease;
+}
+
+.next-chapter-btn:hover .arrow {
+    transform: translateX(5px); /* ホバーで矢印が動く */
+}
+
+/* GIFのサイズ調整 */
+.summary-gif {
+    width: 100%;
+    margin-bottom: 1vh; /* summaryとの間の余白 */
+}
+
+.summary-gif img {
+    width: 100%; /* 紙の幅に対してのサイズ（お好みで調整してください） */
+    height: auto;
+    object-fit: contain;
+}
+
+.summary {
+    font-size: 2vh;
+    line-height: 1.8;
+    color: #2c4463;
+    margin-bottom: 3vh;
+}
