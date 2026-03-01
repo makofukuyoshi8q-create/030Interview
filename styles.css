@@ -34,7 +34,7 @@ body {
     /* 画面いっぱいの高さに固定 */
     object-fit: cover;
     /* 画面幅に合わせて拡大 */
-    object-position: bottom;
+    object-position: center;
     /* 画像の下端を画面の下に合わせる（上が切れる） */
     display: block;
 }
